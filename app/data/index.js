@@ -41,3 +41,5 @@ export {
 } from "./paymentProcessData";
 
 export { successOrderInfoData, orderPlacedData } from "./successData";
+
+export { bookingsPageData, bookingsOrdersData } from "./bookingsData";
