@@ -31,3 +31,11 @@ export {
 } from "./detailsData";
 
 export { orderSummaryData, cartItemsData } from "./cartData";
+
+export {
+  paymentProcessFooterData,
+  paymentMethodData,
+  paymentOrderSummaryData,
+  paymentProductsListData,
+  addressSummaryData,
+} from "./paymentProcessData";
