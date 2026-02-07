@@ -18,6 +18,7 @@ module.exports = {
           yellow: "#FFD814",
           yellow_hover: "#F7CA00",
           secondary: "#FFA41C",
+          secondary_hover: "#FA8900",
         },
       },
       fontFamily: {

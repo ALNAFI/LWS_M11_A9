@@ -8,3 +8,7 @@ body {
 .star-rating {
     color: #ffa41c;
 }
+.tab-active {
+    border-bottom: 2px solid #c7511f;
+    color: #c7511f;
+}
