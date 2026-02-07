@@ -43,3 +43,7 @@ export {
 export { successOrderInfoData, orderPlacedData } from "./successData";
 
 export { bookingsPageData, bookingsOrdersData } from "./bookingsData";
+
+export { forgetPasswordData } from "./forgetPasswordData";
+export { loginData } from "./loginData";
+export { registerData } from "./registerData";
