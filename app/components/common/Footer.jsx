@@ -2,6 +2,7 @@ import React from 'react'
 import { footerData, footerBrand, footerCopyrightText } from '@/app/data'
 import { getCurrentYear } from '@/app/utils'
 import BackToTop from './SubFooter/BackToTop'
+import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="bg-amazon-light text-white mt-8">
@@ -13,9 +14,9 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-300">
               {section.links.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="hover:underline">
+                  <Link href={link.href} className="hover:underline">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
