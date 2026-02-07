@@ -2,17 +2,17 @@ export const footerData = [
   {
     title: 'Get to Know Us',
     links: [
-      { label: 'About Gadgets BD', href: 'about.html' },
+      { label: 'About Gadgets BD', href: '/about' },
       { label: 'Careers', href: '#' },
-      { label: 'Our Top Brands', href: 'shops.html' },
+      { label: 'Our Top Brands', href: '/shops' },
     ],
   },
   {
     title: 'Make Money with Us',
     links: [
-      { label: 'Sell on Gadgets BD', href: 'register.html' },
-      { label: 'Supply to Gadgets BD', href: 'create.html' },
-      { label: 'Become an Affiliate', href: 'manageList.html' },
+      { label: 'Sell on Gadgets BD', href: '/register' },
+      { label: 'Supply to Gadgets BD', href: '/create' },
+      { label: 'Become an Affiliate', href: '/manageList' },
     ],
   },
   {
@@ -27,10 +27,10 @@ export const footerData = [
     title: 'Let Us Help You',
     links: [
       { label: 'Your Account', href: '#' },
-      { label: 'Your Orders', href: 'bookings.html' },
+      { label: 'Your Orders', href: '/bookings' },
       { label: 'Shipping Rates & Policies', href: '#' },
       { label: 'Returns & Replacements', href: '#' },
-      { label: 'Manage Your Content and Devices', href: 'forgot-password.html' },
+      { label: 'Manage Your Content and Devices', href: '/forgot-password' },
       { label: 'Help', href: '#' },
     ],
   },
