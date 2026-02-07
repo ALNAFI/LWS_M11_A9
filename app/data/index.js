@@ -1,8 +1,4 @@
-export { 
-    footerData, 
-    footerBrand, 
-    footerCopyrightText 
-} from "./footerData";
+export { footerData, footerBrand, footerCopyrightText } from "./footerData";
 
 export {
   brandData,
@@ -34,3 +30,4 @@ export {
   descriptionTabData,
 } from "./detailsData";
 
+export { orderSummaryData, cartItemsData } from "./cartData";
