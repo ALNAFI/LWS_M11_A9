@@ -1,0 +1,14 @@
+import React from 'react'
+import Link from 'next/link'
+export default function Logo() {
+    return (
+        <Link
+            href="/"
+            className="flex items-center hover:outline hover:outline-1 hover:outline-white rounded-sm p-1"
+        >
+            <span className="text-2xl font-bold tracking-tighter">
+                gadgets<span className="italic text-amazon-secondary">BD</span>
+            </span>
+        </Link>
+    )
+}

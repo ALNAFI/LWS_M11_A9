@@ -8,8 +8,20 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        amazon: {
+          background: "#E3E6E6",
+          light: "#232F3E",
+          DEFAULT: "#131921",
+          text: "#333333",
+          blue: "#007185",
+          orange: "#C7511F",
+          yellow: "#FFD814",
+          yellow_hover: "#F7CA00",
+          secondary: "#FFA41C",
+        },
+      },
+      fontFamily: {
+        sans: ["Arial", "sans-serif"],
       },
     },
   },
