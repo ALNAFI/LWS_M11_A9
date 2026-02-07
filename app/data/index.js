@@ -39,3 +39,5 @@ export {
   paymentProductsListData,
   addressSummaryData,
 } from "./paymentProcessData";
+
+export { successOrderInfoData, orderPlacedData } from "./successData";
