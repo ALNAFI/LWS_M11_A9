@@ -17,7 +17,8 @@ export default function ProductsPageClient() {
     const params = new URLSearchParams()
     if (search) params.set('search', search)
     if (category) params.set('category', category)
-    fetch(`/api/products?${params.toString()}`)
+    const query = params.toString()
+    fetch(query ? `/api/products?${query}` : '/api/products')
       .then((res) => res.json())
       .then((data) => {
         setProducts(data.products ?? [])

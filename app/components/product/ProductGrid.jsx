@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { StarIcon } from 'lucide-react'
 import { useCart } from '@/app/context/CartContext'
 
 function formatPrice(price) {
