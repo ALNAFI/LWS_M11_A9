@@ -2,11 +2,14 @@ import "./globals.css";
 import AuthProvider from "./components/auth/AuthProvider";
 import { CartProvider } from "./context/CartContext";
 import Navbar from "./components/common/Navbar";
+import { getMetadataForPath } from "./config/metadata";
+import { headers } from "next/headers";
 
-export const metadata = {
-  title: "Gadgets BD - Premium Tech Marketplace",
-  description: "Buy and Sell Premium Tech Products",
-};
+export async function generateMetadata() {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "/";
+  return getMetadataForPath(pathname);
+}
 
 export default function RootLayout({ children }) {
   return (

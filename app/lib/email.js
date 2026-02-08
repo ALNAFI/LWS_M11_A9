@@ -18,6 +18,34 @@ function getTransport() {
   })
 }
 
+export async function sendWelcomeEmail({ to, name }) {
+  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@gadgetsbd.com'
+  const appName = 'Gadgets BD'
+  const creatorName = name ? String(name).trim() : 'there'
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;line-height:1.6;color:#232f3e;">
+      <p>Hi ${escapeHtml(creatorName)},</p>
+      <p>I'm Alnafi, CEO of <strong>${appName}</strong>.</p>
+      <p>Welcome to our platform, and thanks for registering with us. We're excited to have you on board. ${appName} is built to connect great products with the right people, and your journey with us starts here.</p>
+      <p>You can now explore products, manage your account, and take full advantage of everything our platform offers. If you're a shop owner, this is your space to grow your shop and reach more customers. If you're here as a buyer, we hope you find exactly what you're looking for.</p>
+      <p>If you ever need help or have questions, our team is always ready to support you.</p>
+      <p>Wishing you a great experience with ${appName}.</p>
+      <p>Best regards,<br/><strong>Alnafi</strong><br/>CEO, ${appName}</p>
+    </div>
+  `
+  const text = `Hi ${creatorName},\n\nI'm Alnafi, CEO of Gadgets BD.\n\nWelcome to our platform, and thanks for registering with us. We're excited to have you on board. Gadgets BD is built to connect great products with the right people, and your journey with us starts here.\n\nYou can now explore products, manage your account, and take full advantage of everything our platform offers. If you're a shop owner, this is your space to grow your shop and reach more customers. If you're here as a buyer, we hope you find exactly what you're looking for.\n\nIf you ever need help or have questions, our team is always ready to support you.\n\nWishing you a great experience with Gadgets BD.\n\nBest regards,\nAlnafi\nCEO, Gadgets BD`
+
+  const transport = getTransport()
+  await transport.sendMail({
+    from: `"${appName}" <${from}>`,
+    to,
+    subject: `Welcome to ${appName}`,
+    html,
+    text,
+  })
+}
+
 export async function sendPasswordResetEmail({ to, resetLink }) {
   const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'http://localhost:3000'
   const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@gadgetsbd.com'

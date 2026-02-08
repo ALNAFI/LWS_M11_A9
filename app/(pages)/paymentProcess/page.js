@@ -65,7 +65,7 @@ export default function PaymentProcessPage() {
   if (checkoutItems === null) {
     return (
       <>
-        <Header />
+        <Header itemCount={0} />
         <main className="checkout-container flex-1 py-10 px-4 flex items-center justify-center">
           <p className="text-gray-600">Loading...</p>
         </main>
@@ -85,7 +85,7 @@ export default function PaymentProcessPage() {
 
   return (
     <>
-      <Header />
+      <Header itemCount={checkoutItems.length} />
       <main className="checkout-container flex-1 py-10 px-4 flex flex-col lg:flex-row gap-8">
         <div className="flex-1 space-y-6">
           <AddressSummary

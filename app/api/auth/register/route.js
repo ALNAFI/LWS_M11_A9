@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import connectMongo from '@/app/dbConnect/connectMongo'
 import User from '@/app/models/User'
 import bcrypt from 'bcryptjs'
+import { sendWelcomeEmail } from '@/app/lib/email'
 
 export async function POST(request) {
   try {
@@ -53,6 +54,12 @@ export async function POST(request) {
       shopName: finalShopName,
       provider: 'credentials',
     })
+
+    try {
+      await sendWelcomeEmail({ to: user.email, name: user.name })
+    } catch (emailErr) {
+      console.error('Welcome email error:', emailErr)
+    }
 
     return NextResponse.json({
       success: true,

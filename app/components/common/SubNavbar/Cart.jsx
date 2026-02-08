@@ -1,14 +1,35 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ShoppingCartIcon } from 'lucide-react'
 import { useCart } from '@/app/context/CartContext'
+import { useSession } from 'next-auth/react'
 
 export default function Cart() {
+  const { data: session } = useSession()
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
   const { items } = useCart()
-  const count = items.length
 
+  useEffect(() => {
+    if (session?.user) {
+      setUser({ userType: session.user.userType })
+      setLoading(false)
+      return
+    }
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data) => setUser(data?.user ?? null))
+      .catch(() => setUser(null))
+      .finally(() => setLoading(false))
+  }, [session])
+
+  const isLoggedIn = !!(session?.user || user)
+  const isShopOwner = user?.userType === 'shopOwner' || session?.user?.userType === 'shopOwner'
+  if (loading || !isLoggedIn || isShopOwner) return null
+
+  const count = items.length
   return (
     <Link
       href="/cart"

@@ -34,7 +34,7 @@ export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceO
           {paymentMethodData.methods.map((method) => (
             <label
               key={method.id}
-              className="flex items-start gap-3 p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-amazon-background transition-colors bg-gray-50 border-amazon-orange ring-1 ring-amazon-orange"
+              className="flex items-start gap-3 p-3 border border-gray-300 rounded-md cursor-pointer hover:bg-amazon-background transition-colors bg-gray-50  ring-1 ring-amazon-orange"
             >
               <div>
                 <span className="font-bold block text-sm">
