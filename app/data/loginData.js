@@ -42,6 +42,6 @@ export const loginData = {
   },
   createAccount: {
     label: 'Create your Gadgets BD account',
-    href: '/register',
+    href: '/auth/register',
   },
 }

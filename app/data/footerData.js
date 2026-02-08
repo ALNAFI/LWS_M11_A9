@@ -10,7 +10,7 @@ export const footerData = [
   {
     title: 'Make Money with Us',
     links: [
-      { label: 'Sell on Gadgets BD', href: '/register' },
+      { label: 'Sell on Gadgets BD', href: '/auth/register' },
       { label: 'Supply to Gadgets BD', href: '/create' },
       { label: 'Become an Affiliate', href: '/manageList' },
     ],
