@@ -10,6 +10,7 @@ export const cardGridData = [
       ],
       linkText: 'See all laptops',
       href: '/products',
+      category: 'Laptops & Computers',
     },
     {
       type: 'single',
@@ -18,6 +19,7 @@ export const cardGridData = [
         'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500',
       linkText: 'Shop smartphones',
       href: '/products',
+      category: 'Smartphones & Tablets',
     },
     {
       type: 'single',
@@ -26,6 +28,7 @@ export const cardGridData = [
         'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
       linkText: 'Shop accessories',
       href: '/products',
+      category: 'Audio & Headphones',
     },
     {
       type: 'signin',
@@ -110,6 +113,7 @@ export const categoriesData = [
     {
       title: 'Laptops',
       href: '/products',
+      category: 'Laptops & Computers',
       image:
         'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200',
       alt: 'Laptops',
@@ -117,6 +121,7 @@ export const categoriesData = [
     {
       title: 'Smartphones',
       href: '/products',
+      category: 'Smartphones & Tablets',
       image:
         'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200',
       alt: 'Smartphones',
@@ -124,6 +129,7 @@ export const categoriesData = [
     {
       title: 'Audio',
       href: '/products',
+      category: 'Audio & Headphones',
       image:
         'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200',
       alt: 'Headphones',
@@ -131,6 +137,7 @@ export const categoriesData = [
     {
       title: 'Gaming',
       href: '/products',
+      category: 'Gaming Accessories',
       image:
         'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=200',
       alt: 'Gaming',
@@ -138,6 +145,7 @@ export const categoriesData = [
     {
       title: 'Cameras',
       href: '/products',
+      category: 'Cameras & Photography',
       image:
         'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=200',
       alt: 'Cameras',
@@ -145,6 +153,7 @@ export const categoriesData = [
     {
       title: 'Wearables',
       href: '/products',
+      category: 'Wearables & Smartwatches',
       image:
         'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=200',
       alt: 'Wearables',

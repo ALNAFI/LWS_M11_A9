@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { User } from 'lucide-react'
 import { footerBrand, profilePageData } from '@/app/data'
 
-export default function ProfileHeader() {
+export default function ProfileHeader({ user }) {
   const { header } = profilePageData
 
   return (
@@ -37,7 +37,7 @@ export default function ProfileHeader() {
           <div className="h-4 w-px bg-gray-600" />
           <div className="flex items-center gap-1 cursor-pointer">
             <User className="w-4 h-4" />
-            <span>{header.userLabel}</span>
+            <span>{user?.name ?? header.userLabel}</span>
           </div>
         </div>
       </div>

@@ -12,22 +12,62 @@ export async function GET(request) {
       const payload = await verifyAccessToken(accessToken)
       if (payload?.sub) {
         await connectMongo()
-        const user = await User.findById(payload.sub).select('name email userType')
+        const user = await User.findById(payload.sub).select(
+          'name email userType mobile shopName shopDescription shopLocation shopAddress shopSpecialization shopBannerImage yearEstablished employees brandPartnerships website'
+        )
         if (user) {
-          return NextResponse.json({
-            user: {
-              id: user._id.toString(),
-              name: user.name,
-              email: user.email,
-              userType: user.userType,
-            },
-          })
+          const userJson = {
+            id: user._id.toString(),
+            name: user.name,
+            email: user.email,
+            userType: user.userType,
+            mobile: user.mobile || '',
+          }
+          if (user.userType === 'shopOwner') {
+            userJson.shopName = user.shopName || ''
+            userJson.shopDescription = user.shopDescription || ''
+            userJson.shopLocation = user.shopLocation || ''
+            userJson.shopAddress = user.shopAddress || ''
+            userJson.shopSpecialization = user.shopSpecialization || ''
+            userJson.shopBannerImage = user.shopBannerImage || ''
+            userJson.yearEstablished = user.yearEstablished ?? ''
+            userJson.employees = user.employees ?? ''
+            userJson.brandPartnerships = user.brandPartnerships || ''
+            userJson.website = user.website || ''
+          }
+          return NextResponse.json({ user: userJson })
         }
       }
     }
 
     const session = await getServerSession(request, authOptions)
     if (session?.user) {
+      await connectMongo()
+      const user = await User.findById(session.user.id).select(
+        'name email userType mobile shopName shopDescription shopLocation shopAddress shopSpecialization shopBannerImage yearEstablished employees brandPartnerships website'
+      )
+      if (user) {
+        const userJson = {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          userType: user.userType || 'customer',
+          mobile: user.mobile || '',
+        }
+        if (user.userType === 'shopOwner') {
+          userJson.shopName = user.shopName || ''
+          userJson.shopDescription = user.shopDescription || ''
+          userJson.shopLocation = user.shopLocation || ''
+          userJson.shopAddress = user.shopAddress || ''
+          userJson.shopSpecialization = user.shopSpecialization || ''
+          userJson.shopBannerImage = user.shopBannerImage || ''
+          userJson.yearEstablished = user.yearEstablished ?? ''
+          userJson.employees = user.employees ?? ''
+          userJson.brandPartnerships = user.brandPartnerships || ''
+          userJson.website = user.website || ''
+        }
+        return NextResponse.json({ user: userJson })
+      }
       return NextResponse.json({
         user: {
           id: session.user.id,

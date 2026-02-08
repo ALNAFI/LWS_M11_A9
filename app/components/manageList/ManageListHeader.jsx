@@ -3,8 +3,9 @@ import Link from 'next/link'
 import { User } from 'lucide-react'
 import { footerBrand, manageListPageData } from '@/app/data'
 
-export default function ManageListHeader() {
+export default function ManageListHeader({ user }) {
   const { header } = manageListPageData
+  const displayLabel = user?.name ?? header.userLabel
 
   return (
     <nav className="bg-amazon text-white p-3 shadow-md">
@@ -37,7 +38,7 @@ export default function ManageListHeader() {
           <div className="h-4 w-px bg-gray-600" />
           <div className="flex items-center gap-1 cursor-pointer">
             <User className="w-4 h-4" />
-            <span>{header.userLabel}</span>
+            <span>{displayLabel}</span>
           </div>
         </div>
       </div>

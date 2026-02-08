@@ -1,11 +1,17 @@
+'use client'
+
 import React from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   CheckCircleIcon,
   ShieldCheckIcon,
   TruckIcon,
 } from 'lucide-react'
 import { orderSummaryData } from '@/app/data'
+import { useCart } from '@/app/context/CartContext'
+
+const CHECKOUT_STORAGE_KEY = 'gadgetsbd_checkout_items'
 
 const subtotalBoxIcon = {
   ShieldCheck: ShieldCheckIcon,
@@ -13,13 +19,35 @@ const subtotalBoxIcon = {
 }
 
 export default function OrderSummarySidebar() {
+  const router = useRouter()
+  const { selectedItems, selectedSubtotal } = useCart()
   const {
     freeShipping,
-    subtotal,
     giftOption,
     checkoutButton,
     footerItems,
   } = orderSummaryData
+
+  const selectedCount = selectedItems.length
+  const canCheckout = selectedCount > 0
+  const subtotalDisplay = `৳${selectedSubtotal.toLocaleString('en-BD')}`
+
+  function handleProceedToCheckout() {
+    if (!canCheckout) return
+    const payload = selectedItems.map((item) => ({
+      id: item.id,
+      title: item.title,
+      image: item.image,
+      price: item.price,
+      priceDisplay: item.priceDisplay,
+      seller: item.seller,
+      quantity: item.quantity,
+    }))
+    try {
+      sessionStorage.setItem(CHECKOUT_STORAGE_KEY, JSON.stringify(payload))
+    } catch (_) {}
+    router.push(checkoutButton.href)
+  }
 
   return (
     <div className="lg:w-80">
@@ -35,9 +63,9 @@ export default function OrderSummarySidebar() {
 
         <div className="mb-4">
           <p className="text-lg mb-1">
-            Subtotal ({subtotal.itemCount} items):
+            Subtotal ({selectedCount} item{selectedCount !== 1 ? 's' : ''}):
             <span className="font-bold text-amazon-orange">
-              {subtotal.amount}
+              {subtotalDisplay}
             </span>
           </p>
           <div className="flex items-start gap-2 text-xs">
@@ -52,12 +80,17 @@ export default function OrderSummarySidebar() {
           </div>
         </div>
 
-        <Link
-          href={checkoutButton.href}
-          className="w-full block text-center py-2 bg-amazon-yellow hover:bg-amazon-yellow_hover border border-amazon-secondary rounded-md text-sm font-bold shadow-sm transition-colors mb-2"
+        <button
+          type="button"
+          onClick={handleProceedToCheckout}
+          disabled={!canCheckout}
+          className="w-full py-2 bg-amazon-yellow hover:bg-amazon-yellow_hover border border-amazon-secondary rounded-md text-sm font-bold shadow-sm transition-colors mb-2 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {checkoutButton.label}
-        </Link>
+        </button>
+        {!canCheckout && selectedCount === 0 && (
+          <p className="text-xs text-gray-500 mb-2">Select at least one item to checkout.</p>
+        )}
 
         <div className="text-xs text-gray-600 mt-4">
           {footerItems.map((item) => {

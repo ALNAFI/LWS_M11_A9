@@ -2,11 +2,11 @@ import React from 'react'
 import ShopPreviewCard from './ShopPreviewCard'
 import ShopInfoGrid from './ShopInfoGrid'
 
-export default function ProfileViewMode() {
+export default function ProfileViewMode({ user }) {
   return (
     <div className="space-y-6">
-      <ShopPreviewCard />
-      <ShopInfoGrid />
+      <ShopPreviewCard user={user} />
+      <ShopInfoGrid user={user} />
     </div>
   )
 }

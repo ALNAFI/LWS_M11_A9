@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { Pencil, Eye, EyeOff, Trash2 } from 'lucide-react'
 import { manageListPageData } from '@/app/data'
@@ -16,10 +18,20 @@ const AVAILABLE_STYLES = {
 
 const ACTION_ICONS = { Pencil, Eye, EyeOff, Trash2 }
 
-export default function ProductTableRow({ product }) {
+function getStatus(product) {
+  const qty = product.stockQuantity ?? 0
+  if (qty === 0) return { status: 'outOfStock', statusLabel: 'Out of Stock' }
+  if (qty <= 5) return { status: 'lowStock', statusLabel: 'Low Stock' }
+  return { status: 'inStock', statusLabel: 'In Stock' }
+}
+
+export default function ProductTableRow({ product, onEdit, onPublishToggle, onDelete }) {
   const { table } = manageListPageData
-  const statusStyle = STATUS_STYLES[product.status] ?? STATUS_STYLES.inStock
-  const availableStyle = AVAILABLE_STYLES[product.status] ?? AVAILABLE_STYLES.inStock
+  const { status, statusLabel } = getStatus(product)
+  const statusStyle = STATUS_STYLES[status] ?? STATUS_STYLES.inStock
+  const availableStyle = AVAILABLE_STYLES[status] ?? AVAILABLE_STYLES.inStock
+  const imageUrl = product.mainImageUrl || 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100'
+  const priceFormatted = typeof product.price === 'number' ? product.price.toLocaleString('en-BD') : product.price
 
   return (
     <tr className="hover:bg-gray-50">
@@ -28,46 +40,56 @@ export default function ProductTableRow({ product }) {
       </td>
       <td className="p-3">
         <span className={`inline-block px-2 py-1 text-xs font-bold rounded ${statusStyle}`}>
-          {product.statusLabel}
+          {product.published ? statusLabel : 'Unpublished'}
         </span>
       </td>
       <td className="p-3">
         <img
-          src={product.image}
-          alt={product.name}
+          src={imageUrl}
+          alt={product.productName}
           className="w-12 h-12 object-cover rounded border border-gray-200"
         />
       </td>
       <td className="p-3">
-        <div className="font-medium">{product.name}</div>
-        <div className="text-xs text-gray-500">SKU: {product.sku}</div>
+        <div className="font-medium">{product.productName}</div>
+        <div className="text-xs text-gray-500">SKU: {product.sku || '—'}</div>
       </td>
       <td className="p-3 text-gray-600">{product.category}</td>
       <td className="p-3 text-gray-600">{product.brand}</td>
-      <td className="p-3 font-bold">{product.price}</td>
+      <td className="p-3 font-bold">{priceFormatted}</td>
       <td className="p-3">
-        <span className={`font-bold ${availableStyle}`}>{product.available}</span>
+        <span className={`font-bold ${availableStyle}`}>{product.stockQuantity ?? 0}</span>
       </td>
       <td className="p-3">
         <div className="flex items-center justify-end gap-2">
-          {table.rowActions.map((action) => {
-            const iconName = action.id === 'visibility'
-              ? (product.isPublished ? action.icon : action.iconPublished)
-              : action.icon
-            const Icon = ACTION_ICONS[iconName]
-            const title = action.id === 'visibility'
-              ? (product.isPublished ? action.titleUnpublish : action.titlePublish)
-              : action.title
-            return (
-              <button
-                key={action.id}
-                className="p-1.5 hover:bg-gray-100 rounded"
-                title={title}
-              >
-                {Icon && <Icon className={`w-4 h-4 ${action.colorClass}`} />}
-              </button>
-            )
-          })}
+          <button
+            type="button"
+            onClick={() => onEdit?.(product.id)}
+            className="p-1.5 hover:bg-gray-100 rounded"
+            title="Edit"
+          >
+            <Pencil className="w-4 h-4 text-amazon-blue" />
+          </button>
+          <button
+            type="button"
+            onClick={() => onPublishToggle?.(product.id, !product.published)}
+            className="p-1.5 hover:bg-gray-100 rounded"
+            title={product.published ? 'Unpublish' : 'Publish'}
+          >
+            {product.published ? (
+              <EyeOff className="w-4 h-4 text-gray-600" />
+            ) : (
+              <Eye className="w-4 h-4 text-gray-600" />
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete?.(product.id)}
+            className="p-1.5 hover:bg-gray-100 rounded"
+            title="Delete"
+          >
+            <Trash2 className="w-4 h-4 text-red-600" />
+          </button>
         </div>
       </td>
     </tr>

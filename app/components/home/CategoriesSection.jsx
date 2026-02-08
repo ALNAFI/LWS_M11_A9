@@ -11,7 +11,7 @@ export default function CategoriesSection() {
         {categoriesData.map((category) => (
           <Link
             key={category.title}
-            href={category.href}
+            href={category.category ? `${category.href}?category=${encodeURIComponent(category.category)}` : category.href}
             className="bg-white p-4 text-center hover:shadow-md transition-shadow border border-gray-200 rounded"
           >
             <div className="h-32 flex items-center justify-center mb-2">

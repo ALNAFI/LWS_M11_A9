@@ -25,7 +25,7 @@ export default function CardGrid() {
               </div>
 
               <Link
-                href={card.href}
+                href={card.category ? `${card.href}?category=${encodeURIComponent(card.category)}` : card.href}
                 className="text-amazon-blue text-sm hover:underline hover:text-red-700 mt-auto"
               >
                 {card.linkText}
@@ -50,7 +50,7 @@ export default function CardGrid() {
               </div>
 
               <Link
-                href={card.href}
+                href={card.category ? `${card.href}?category=${encodeURIComponent(card.category)}` : card.href}
                 className="text-amazon-blue text-sm hover:underline hover:text-red-700 mt-auto"
               >
                 {card.linkText}

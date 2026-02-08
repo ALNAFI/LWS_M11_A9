@@ -8,9 +8,20 @@ import ProfileEditForm from './ProfileEditForm'
 
 const iconMap = { Eye, Pencil }
 
-export default function ProfileContent() {
+export default function ProfileContent({ user, onUserUpdate }) {
   const [isEditMode, setIsEditMode] = useState(false)
+  const [profileUser, setProfileUser] = useState(user)
   const { pageIntro } = profilePageData
+
+  React.useEffect(() => {
+    if (user) setProfileUser(user)
+  }, [user])
+
+  const handleSave = (updatedUser) => {
+    setProfileUser(updatedUser)
+    onUserUpdate?.(updatedUser)
+    setIsEditMode(false)
+  }
 
   return (
     <>
@@ -47,9 +58,9 @@ export default function ProfileContent() {
       </div>
 
       {isEditMode ? (
-        <ProfileEditForm onCancel={() => setIsEditMode(false)} />
+        <ProfileEditForm user={profileUser} onCancel={() => setIsEditMode(false)} onSave={handleSave} />
       ) : (
-        <ProfileViewMode />
+        <ProfileViewMode user={profileUser} />
       )}
     </>
   )

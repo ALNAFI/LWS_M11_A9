@@ -37,6 +37,49 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    shopDescription: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    shopLocation: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    shopAddress: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    shopSpecialization: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    shopBannerImage: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    yearEstablished: {
+      type: Number,
+      default: null,
+    },
+    employees: {
+      type: Number,
+      default: null,
+    },
+    brandPartnerships: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    website: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     provider: {
       type: String,
       enum: ['credentials', 'google'],

@@ -23,11 +23,11 @@ function StarRating({ rating }) {
 export default function ShopCard({ shop }) {
   const {
     image,
-    imageGradient,
+    imageGradient = 'from-blue-50 to-blue-100',
     name,
     location,
-    rating,
-    ratingsCount,
+    rating = 0,
+    ratingsCount = '',
     description,
     specializesIn,
     href,

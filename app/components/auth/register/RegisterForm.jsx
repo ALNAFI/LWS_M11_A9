@@ -46,6 +46,22 @@ export default function RegisterForm() {
         setLoading(false)
         return
       }
+      if (data.user?.userType === 'shopOwner') {
+        const loginRes = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            email: fd.get('email'),
+            password: fd.get('password'),
+          }),
+        })
+        if (loginRes.ok) {
+          router.push('/profile')
+          router.refresh()
+          return
+        }
+      }
       router.push('/auth/login')
       router.refresh()
     } catch {
