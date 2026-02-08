@@ -46,3 +46,5 @@ export { loginData } from "./loginData";
 export { registerData } from "./registerData";
 export { reviewPageData } from "./reviewData";
 export { createPageData } from "./createData";
+export { shopPageData } from "./shopData";
+export { profilePageData } from "./profileData";
