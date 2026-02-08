@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 
 const MENU_SHOP_OWNER = [
@@ -22,6 +22,7 @@ const MENU_NORMAL_USER = [
 
 export default function Account() {
   const router = useRouter()
+  const pathname = usePathname()
   const { data: session } = useSession()
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -29,12 +30,13 @@ export default function Account() {
   const menuRef = useRef(null)
 
   useEffect(() => {
+    setLoading(true)
     fetch('/api/auth/me', { credentials: 'include' })
       .then((res) => (res.ok ? res.json() : { user: null }))
       .then((data) => setUser(data?.user ?? null))
       .catch(() => setUser(null))
       .finally(() => setLoading(false))
-  }, [session])
+  }, [session, pathname])
 
   useEffect(() => {
     function handleClickOutside(e) {

@@ -36,7 +36,8 @@ export default function LoginForm() {
         setLoading(false)
         return
       }
-      router.push('/')
+      const isShopOwner = data.user?.userType === 'shopOwner'
+      router.push(isShopOwner ? '/profile' : '/')
       router.refresh()
     } catch {
       setError('Something went wrong. Please try again.')

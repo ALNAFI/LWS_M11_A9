@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import { User } from 'lucide-react'
 import { footerBrand, manageListPageData } from '@/app/data'
+import ShopOwnerNavUser from '@/app/components/common/ShopOwnerNavUser'
 
 export default function ManageListHeader({ user }) {
   const { header } = manageListPageData
@@ -36,10 +36,7 @@ export default function ManageListHeader({ user }) {
             </Link>
           ))}
           <div className="h-4 w-px bg-gray-600" />
-          <div className="flex items-center gap-1 cursor-pointer">
-            <User className="w-4 h-4" />
-            <span>{displayLabel}</span>
-          </div>
+          <ShopOwnerNavUser displayName={displayLabel} />
         </div>
       </div>
     </nav>

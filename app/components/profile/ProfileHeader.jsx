@@ -1,10 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
-import { User } from 'lucide-react'
 import { footerBrand, profilePageData } from '@/app/data'
+import ShopOwnerNavUser from '@/app/components/common/ShopOwnerNavUser'
 
 export default function ProfileHeader({ user }) {
   const { header } = profilePageData
+  const displayLabel = user?.name ?? header.userLabel
 
   return (
     <nav className="bg-amazon text-white p-3 shadow-md">
@@ -35,10 +36,7 @@ export default function ProfileHeader({ user }) {
             </Link>
           ))}
           <div className="h-4 w-px bg-gray-600" />
-          <div className="flex items-center gap-1 cursor-pointer">
-            <User className="w-4 h-4" />
-            <span>{user?.name ?? header.userLabel}</span>
-          </div>
+          <ShopOwnerNavUser displayName={displayLabel} />
         </div>
       </div>
     </nav>
