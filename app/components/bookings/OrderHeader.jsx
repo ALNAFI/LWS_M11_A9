@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Link from 'next/link'
 export default function OrderHeader({ order }) {
   const { orderPlaced, total, shipTo, id, viewDetailsHref } = order
 
@@ -23,9 +23,9 @@ export default function OrderHeader({ order }) {
       </div>
       <div className="text-right">
         <div className="uppercase tracking-tighter mb-1">Order # {id}</div>
-        <a href={viewDetailsHref} className="text-amazon-blue hover:underline">
+        <Link href={viewDetailsHref} className="text-amazon-blue hover:underline">
           View order details
-        </a>
+        </Link>
       </div>
     </div>
   )
