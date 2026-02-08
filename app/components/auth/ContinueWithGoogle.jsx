@@ -1,4 +1,7 @@
+'use client'
+
 import React from 'react'
+import { signIn } from 'next-auth/react'
 
 function GoogleIcon({ className }) {
   return (
@@ -30,11 +33,11 @@ function GoogleIcon({ className }) {
   )
 }
 
-export default function ContinueWithGoogle({ className = '', onClick }) {
+export default function ContinueWithGoogle({ className = '', callbackUrl = '/' }) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={() => signIn('google', { callbackUrl })}
       className={`w-full flex items-center justify-center gap-2 py-2 px-3 border border-gray-400 rounded-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-amazon-secondary focus:border-amazon-secondary ${className}`}
     >
       <GoogleIcon className="flex-shrink-0" />

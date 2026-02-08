@@ -1,5 +1,8 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 import { loginData } from '@/app/data'
 import ContinueWithGoogle from '@/app/components/auth/ContinueWithGoogle'
@@ -8,13 +11,50 @@ const inputClassName =
   'w-full px-2 py-1.5 border border-gray-400 rounded-sm outline-none focus:ring-1 focus:ring-amazon-secondary focus:border-amazon-secondary'
 
 export default function LoginForm() {
+  const router = useRouter()
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const { form, disclaimer, helpLink } = loginData
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+    const fd = new FormData(e.target)
+    const email = fd.get('email')
+    const password = fd.get('password')
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Login failed.')
+        setLoading(false)
+        return
+      }
+      router.push('/')
+      router.refresh()
+    } catch {
+      setError('Something went wrong. Please try again.')
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="w-full max-w-[350px] p-6 a-box mb-6">
       <h1 className="text-2xl font-normal mb-4">{form.title}</h1>
 
-      <form action={form.action} method={form.method} className="space-y-4">
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-sm text-sm text-red-800">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
         {form.fields.map((field) => (
           <div key={field.id}>
             {field.rightLink ? (
@@ -43,6 +83,7 @@ export default function LoginForm() {
             <input
               type={field.type}
               id={field.id}
+              name={field.id}
               required={field.required}
               className={inputClassName}
             />
@@ -51,9 +92,10 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="w-full py-1.5 a-button-primary text-sm font-medium rounded-sm cursor-pointer"
+          disabled={loading}
+          className="w-full py-1.5 a-button-primary text-sm font-medium rounded-sm cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {form.submitLabel}
+          {loading ? 'Signing in...' : form.submitLabel}
         </button>
       </form>
 
@@ -66,7 +108,7 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <ContinueWithGoogle />
+      <ContinueWithGoogle callbackUrl="/" />
 
       <div className="mt-4 text-xs">
         <p>

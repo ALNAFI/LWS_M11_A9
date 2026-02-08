@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Info } from 'lucide-react'
 import { registerData } from '@/app/data'
 import ContinueWithGoogle from '@/app/components/auth/ContinueWithGoogle'
@@ -12,15 +13,58 @@ const selectClassName =
   'px-2 py-1.5 border border-gray-400 rounded-sm outline-none focus:ring-1 focus:ring-amazon-secondary focus:border-amazon-secondary'
 
 export default function RegisterForm() {
+  const router = useRouter()
   const [accountType, setAccountType] = useState('customer')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const { form, disclaimer, signIn, shopOwnerInfo } = registerData
   const isShopOwner = accountType === 'shopOwner'
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+    const fd = new FormData(e.target)
+    const payload = {
+      name: fd.get('name'),
+      email: fd.get('email'),
+      password: fd.get('password'),
+      passwordConfirm: fd.get('passwordConfirm'),
+      mobile: fd.get('mobile') || '',
+      userType: fd.get('userType') || 'customer',
+      shopName: fd.get('shopName') || '',
+    }
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Registration failed.')
+        setLoading(false)
+        return
+      }
+      router.push('/auth/login')
+      router.refresh()
+    } catch {
+      setError('Something went wrong. Please try again.')
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="w-full max-w-[350px] p-6 a-box mb-6">
       <h1 className="text-2xl font-normal mb-4">{form.title}</h1>
 
-      <form action={form.action} method={form.method} className="space-y-4">
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-sm text-sm text-red-800">
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
         {/* Account Type Toggle */}
         <div className="flex gap-2 mb-4 bg-gray-100 p-1 rounded-sm">
           {form.accountTypes.map((type) => (
@@ -60,7 +104,7 @@ export default function RegisterForm() {
                   {field.label}
                 </label>
                 <div className="flex gap-2">
-                  <select className={selectClassName}>
+                  <select className={selectClassName} aria-label="Country code">
                     {field.countrySelect.options.map((opt) => (
                       <option key={opt}>{opt}</option>
                     ))}
@@ -68,6 +112,7 @@ export default function RegisterForm() {
                   <input
                     type={field.type}
                     id={field.id}
+                    name={field.id}
                     required={field.required}
                     placeholder={field.placeholder}
                     className={`flex-1 ${inputClassName}`}
@@ -88,6 +133,7 @@ export default function RegisterForm() {
               <input
                 type={field.type}
                 id={field.id}
+                name={field.id}
                 required={field.showForShopOwner ? isShopOwner : field.required}
                 placeholder={field.placeholder}
                 className={inputClassName}
@@ -104,9 +150,10 @@ export default function RegisterForm() {
 
         <button
           type="submit"
-          className="w-full py-1.5 a-button-primary text-sm font-medium rounded-sm cursor-pointer"
+          disabled={loading}
+          className="w-full py-1.5 a-button-primary text-sm font-medium rounded-sm cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {form.submitLabel}
+          {loading ? 'Creating account...' : form.submitLabel}
         </button>
       </form>
 
@@ -119,7 +166,7 @@ export default function RegisterForm() {
         </div>
       </div>
 
-      <ContinueWithGoogle />
+      <ContinueWithGoogle callbackUrl="/" />
 
       <div className="mt-4 text-xs">
         <p>

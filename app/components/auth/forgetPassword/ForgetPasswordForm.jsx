@@ -4,13 +4,43 @@ import React, { useState } from 'react'
 import { CheckCircle } from 'lucide-react'
 import { forgetPasswordData } from '@/app/data'
 
+const inputClassName =
+  'w-full px-2 py-1.5 border border-gray-400 rounded-sm outline-none focus:ring-1 focus:ring-amazon-secondary focus:border-amazon-secondary'
+
 export default function ForgetPasswordForm() {
   const [showSuccess, setShowSuccess] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const { form, successMessage } = forgetPasswordData
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setShowSuccess(true)
+    setError('')
+    setShowSuccess(false)
+    setLoading(true)
+    const email = e.target.email?.value?.trim()
+    if (!email) {
+      setError('Please enter your email address.')
+      setLoading(false)
+      return
+    }
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Something went wrong.')
+        setLoading(false)
+        return
+      }
+      setShowSuccess(true)
+    } catch {
+      setError('Something went wrong. Please try again.')
+    }
+    setLoading(false)
   }
 
   return (
@@ -18,9 +48,13 @@ export default function ForgetPasswordForm() {
       <h1 className="text-2xl font-normal mb-2">{form.title}</h1>
       <p className="text-sm mb-4">{form.description}</p>
 
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-sm text-sm text-red-800">
+          {error}
+        </div>
+      )}
+
       <form
-        action="#"
-        method="POST"
         id={form.formId}
         className="space-y-4"
         onSubmit={handleSubmit}
@@ -34,19 +68,22 @@ export default function ForgetPasswordForm() {
               {field.label}
             </label>
             <input
-              type={field.type}
+              type="email"
               id={field.id}
+              name={field.id}
               required={field.required}
-              className="w-full px-2 py-1.5 border border-gray-400 rounded-sm outline-none focus:ring-1 focus:ring-amazon-secondary focus:border-amazon-secondary"
+              autoComplete="email"
+              className={inputClassName}
             />
           </div>
         ))}
 
         <button
           type="submit"
-          className="w-full py-1.5 rounded-sm a-button-primary text-sm shadow-sm"
+          disabled={loading}
+          className="w-full py-1.5 rounded-sm a-button-primary text-sm shadow-sm disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {form.submitLabel}
+          {loading ? 'Sending...' : form.submitLabel}
         </button>
       </form>
 
