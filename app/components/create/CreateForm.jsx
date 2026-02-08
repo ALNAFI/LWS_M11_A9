@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createPageData } from '@/app/data'
+import ImageUpload from '@/app/components/common/ImageUpload'
 
 const inputClassName =
   'w-full px-3 py-2 border border-gray-400 rounded-md outline-none focus:ring-1 focus:ring-amazon-blue focus:border-amazon-blue'
@@ -164,17 +165,13 @@ export default function CreateForm({ initialProduct, productId }) {
             {step.type === 'images' ? (
               <>
                 <div>
-                  <label className="block text-sm font-bold mb-1">
-                    {step.mainImage.label}
-                  </label>
-                  <input
-                    type="url"
+                  <ImageUpload
                     name="mainImageUrl"
-                    placeholder="https://example.com/image.jpg"
                     defaultValue={defaultValues.mainImageUrl}
-                    className={inputClassName}
+                    label={step.mainImage.label}
+                    hint={`${step.mainImage.formatHint} (Upload via ImageKit or enter image URL)`}
+                    placeholder="https://example.com/image.jpg"
                   />
-                  <p className="text-xs text-gray-500 mt-1">{step.mainImage.formatHint} (Enter image URL)</p>
                 </div>
                 <div>
                   <label className="block text-sm font-bold mb-1">
@@ -183,12 +180,10 @@ export default function CreateForm({ initialProduct, productId }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[1, 2, 3, 4].map((i) => (
                       <div key={i}>
-                        <input
-                          type="url"
+                        <ImageUpload
                           name={`additionalImageUrl${i}`}
-                          placeholder={`Image ${i} URL`}
                           defaultValue={defaultValues[`additionalImageUrl${i}`]}
-                          className={inputClassName}
+                          placeholder={`Image ${i} URL`}
                         />
                       </div>
                     ))}

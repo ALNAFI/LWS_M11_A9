@@ -1,7 +1,15 @@
+'use client'
+
 import React from 'react'
 import { paymentMethodData } from '@/app/data'
 
-export default function PaymentMethod() {
+export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceOrder }) {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!onPlaceOrder || checkoutItems.length === 0) return
+    await onPlaceOrder()
+  }
+
   return (
     <div className="pb-6">
       <div className="flex items-center mb-6">
@@ -13,10 +21,13 @@ export default function PaymentMethod() {
         </span>
       </div>
 
+      {orderError && (
+        <p className="text-red-600 text-sm mb-4">{orderError}</p>
+      )}
+
       <form
-        action="/success"
-        method="POST"
         id="paymentForm"
+        onSubmit={handleSubmit}
         className="box p-6 space-y-6 shadow-sm"
       >
         <div className="space-y-4">

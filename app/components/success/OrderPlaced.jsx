@@ -1,15 +1,77 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import { CheckIcon, DownloadIcon } from 'lucide-react'
 import Link from 'next/link'
 import { orderPlacedData } from '@/app/data'
 
-const actionIconMap = {
-  Download: DownloadIcon,
+const actionIconMap = { Download: DownloadIcon }
+
+async function downloadInvoice(orderId) {
+  const res = await fetch(`/api/orders/${orderId}/invoice`)
+  if (!res.ok) throw new Error('Failed to download invoice')
+  const blob = await res.blob()
+  const disposition = res.headers.get('Content-Disposition')
+  const match = disposition && disposition.match(/filename="?([^";]+)"?/)
+  const filename = match ? match[1] : `invoice-${orderId}.pdf`
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
 }
 
-export default function OrderPlaced() {
-  const { heading, confirmationMessage, shipping, orderNumber, actions } =
-    orderPlacedData
+function formatDate(createdAt) {
+  if (!createdAt) return '—'
+  return new Date(createdAt).toLocaleDateString('en-BD', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
+function DownloadInvoiceButton({ order, action, IconComponent, isDownload }) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const handleClick = async () => {
+    if (!isDownload || !order?.id) return
+    setError(null)
+    setLoading(true)
+    try {
+      await downloadInvoice(order.id)
+    } catch (e) {
+      setError(e.message || 'Download failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+  return (
+    <div className="flex flex-col items-center">
+      <button
+        type="button"
+        onClick={handleClick}
+        disabled={!order?.id || loading}
+        className="w-full sm:w-auto px-8 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 shadow-xs transition-colors text-center flex items-center justify-center gap-2 disabled:opacity-50"
+      >
+        {IconComponent && <IconComponent className="w-4 h-4" />}
+        {loading ? 'Downloading...' : action.label}
+      </button>
+      {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+    </div>
+  )
+}
+
+export default function OrderPlaced({ order }) {
+  const { heading, confirmationMessage, actions } = orderPlacedData
+
+  const addr = order?.shippingAddress || {}
+  const addressLines = [addr.street, addr.city, addr.country].filter(Boolean)
+  const shippingLabel = addr.name ? `Shipping to ${addr.name}` : 'Shipping address'
+  const orderNumber = order?.orderNumber || orderPlacedData.orderNumber?.number || '—'
+  const placedLabel = order?.createdAt ? `Placed on ${formatDate(order.createdAt)}` : (orderPlacedData.orderNumber?.placedLabel || '')
 
   return (
     <div className="flex items-start gap-4 p-6 border border-gray-300 rounded shadow-sm">
@@ -22,20 +84,25 @@ export default function OrderPlaced() {
 
         <div className="flex flex-col sm:flex-row gap-4 pt-2">
           <div className="flex-1 text-sm bg-gray-50 p-4 border border-gray-200 rounded">
-            <span className="font-bold block mb-1">{shipping.label}</span>
+            <span className="font-bold block mb-1">{shippingLabel}</span>
             <p className="text-gray-600">
-              {shipping.addressLines.map((line, i) => (
-                <React.Fragment key={i}>
-                  {line}
-                  {i < shipping.addressLines.length - 1 && <br />}
-                </React.Fragment>
-              ))}
+              {addressLines.length > 0 ? (
+                addressLines.map((line, i) => (
+                  <React.Fragment key={i}>
+                    {line}
+                    {i < addressLines.length - 1 && <br />}
+                  </React.Fragment>
+                ))
+              ) : (
+                orderPlacedData.shipping?.addressLines?.join(', ') || '—'
+              )}
             </p>
+            {addr.phone && <p className="text-xs text-gray-500 mt-1">Phone: {addr.phone}</p>}
           </div>
           <div className="flex-1 text-sm bg-gray-50 p-4 border border-gray-200 rounded">
-            <span className="font-bold block mb-1">{orderNumber.label}</span>
-            <p className="text-gray-600 font-mono">{orderNumber.number}</p>
-            <p className="text-xs text-gray-500 mt-2">{orderNumber.placedLabel}</p>
+            <span className="font-bold block mb-1">Order Number</span>
+            <p className="text-gray-600 font-mono">{orderNumber}</p>
+            <p className="text-xs text-gray-500 mt-2">{placedLabel}</p>
           </div>
         </div>
 
@@ -43,15 +110,15 @@ export default function OrderPlaced() {
           {actions.map((action) => {
             if (action.type === 'button') {
               const IconComponent = actionIconMap[action.icon]
+              const isDownload = action.label === 'Download Invoice'
               return (
-                <button
+                <DownloadInvoiceButton
                   key={action.label}
-                  type="button"
-                  className="w-full sm:w-auto px-8 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-50 shadow-xs transition-colors text-center flex items-center justify-center gap-2"
-                >
-                  {IconComponent && <IconComponent className="w-4 h-4" />}
-                  {action.label}
-                </button>
+                  order={order}
+                  action={action}
+                  IconComponent={IconComponent}
+                  isDownload={isDownload}
+                />
               )
             }
             return (

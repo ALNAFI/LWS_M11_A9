@@ -40,6 +40,7 @@ function productToJson(p) {
     otherSpecs: p.otherSpecs,
     published: p.published !== false,
     seller: p.seller?.toString?.(),
+    purchases: p.purchases ?? 0,
   }
 }
 

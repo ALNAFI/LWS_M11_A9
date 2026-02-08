@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Navbar, Footer } from '@/app/components/common'
+import { Footer } from '@/app/components/common'
 import { ShopPageIntro, ShopsGrid, ShopPagination } from '@/app/components/shop'
 
 export default function ShopsPage() {
@@ -18,7 +18,6 @@ export default function ShopsPage() {
 
   return (
     <>
-      <Navbar />
       <main className="max-w-[1500px] mx-auto w-full p-4 py-8">
         <ShopPageIntro />
         {loading ? (

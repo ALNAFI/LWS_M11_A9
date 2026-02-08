@@ -7,15 +7,15 @@ import ReviewsTab from './SubTabs/ReviewsTab'
 import ShopInfoTab from './SubTabs/ShopInfoTab'
 import SwitchTabs from './SubTabs/SwitchTabs'
 
-export default function TabsSection() {
-  const [activeTab, setActiveTab] = useState(tabsSectionData.tabs[0].id)
+export default function TabsSection({ product, shop, initialTab }) {
+  const [activeTab, setActiveTab] = useState(initialTab || tabsSectionData.tabs[0].id)
 
   return (
     <div className="mt-12">
       <SwitchTabs activeTab={activeTab} onTabChange={setActiveTab} />
-      {activeTab === 'description' && <DescriptionTab />}
-      {activeTab === 'reviews' && <ReviewsTab />}
-      {activeTab === 'shop' && <ShopInfoTab />}
+      {activeTab === 'description' && <DescriptionTab product={product} />}
+      {activeTab === 'reviews' && <ReviewsTab product={product} />}
+      {activeTab === 'shop' && <ShopInfoTab shop={shop} />}
     </div>
   )
 }

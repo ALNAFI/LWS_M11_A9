@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { profilePageData } from '@/app/data'
+import ImageUpload from '@/app/components/common/ImageUpload'
 
 const inputClassName =
   'w-full px-3 py-2 border border-gray-400 rounded-md outline-none focus:ring-1 focus:ring-amazon-blue focus:border-amazon-blue'
@@ -149,15 +150,13 @@ export default function ProfileEditForm({ user, onCancel, onSave }) {
         </div>
         <div className="p-6 space-y-4">
           <div>
-            <label className="block text-sm font-bold mb-2">Banner image URL</label>
-            <input
-              type="url"
+            <ImageUpload
               name="shopBannerImage"
               defaultValue={user?.shopBannerImage ?? ''}
+              label="Banner image"
+              hint="Upload via ImageKit or enter a direct image URL (e.g. from Unsplash or your hosting)."
               placeholder="https://..."
-              className={inputClassName}
             />
-            <p className="text-xs text-gray-500 mt-1">Enter a direct image URL (e.g. from Unsplash or your hosting).</p>
           </div>
           {user?.shopBannerImage && (
             <div>

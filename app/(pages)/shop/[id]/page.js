@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { Navbar, Footer } from '@/app/components/common'
+import { Footer } from '@/app/components/common'
 
 export default function ShopDetailPage() {
   const params = useParams()
@@ -37,7 +37,6 @@ export default function ShopDetailPage() {
   if (loading) {
     return (
       <>
-        <Navbar />
         <div className="min-h-screen flex items-center justify-center">
           <p className="text-gray-600">Loading...</p>
         </div>
@@ -49,7 +48,6 @@ export default function ShopDetailPage() {
   if (notFound || !shop) {
     return (
       <>
-        <Navbar />
         <div className="min-h-screen flex flex-col items-center justify-center p-6">
           <h1 className="text-xl font-bold text-gray-800 mb-2">Shop not found</h1>
           <Link href="/shop" className="text-amazon-blue hover:underline">
@@ -63,7 +61,6 @@ export default function ShopDetailPage() {
 
   return (
     <>
-      <Navbar />
       <main className="max-w-[1200px] mx-auto w-full px-4 py-8">
         {/* Shop header */}
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-8">

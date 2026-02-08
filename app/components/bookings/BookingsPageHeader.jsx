@@ -1,8 +1,9 @@
 import React from 'react'
 import { bookingsPageData } from '@/app/data'
 
-export default function BookingsPageHeader() {
-  const { pageTitle, ordersCount, periodLabel, periodOptions } = bookingsPageData
+export default function BookingsPageHeader({ ordersCount: ordersCountProp }) {
+  const { pageTitle, ordersCount: defaultCount, periodLabel, periodOptions } = bookingsPageData
+  const ordersCount = ordersCountProp !== undefined ? ordersCountProp : defaultCount
 
   return (
     <>
@@ -10,7 +11,7 @@ export default function BookingsPageHeader() {
         <h1 className="text-3xl font-normal">{pageTitle}</h1>
       </div>
       <div className="text-sm mb-6 flex items-center gap-1">
-        <span className="font-bold">{ordersCount} orders</span>
+        <span className="font-bold">{ordersCount} order{ordersCount !== 1 ? 's' : ''}</span>
         <span>{periodLabel}</span>
         <select className="bg-gray-100 border border-gray-300 rounded shadow-sm px-2 py-1 text-xs outline-none hover:bg-gray-200">
           {periodOptions.map((option) => (

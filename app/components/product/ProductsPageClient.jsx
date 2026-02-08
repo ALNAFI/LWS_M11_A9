@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Footer, Navbar, ResultsHeader, SidebarFilters } from '@/app/components/common'
+import { Footer, ResultsHeader, SidebarFilters } from '@/app/components/common'
 import ProductGrid from '@/app/components/product/ProductGrid'
 
 export default function ProductsPageClient() {
@@ -28,7 +28,6 @@ export default function ProductsPageClient() {
 
   return (
     <>
-      <Navbar />
       <main className="flex-1 max-w-[1500px] mx-auto w-full p-4">
         <ResultsHeader
           searchTerm={search}

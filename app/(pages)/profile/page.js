@@ -36,13 +36,6 @@ export default function ProfilePage() {
   if (user.userType !== 'shopOwner') {
     return (
       <div className="bg-[#F0F2F2] min-h-screen flex flex-col">
-        <nav className="bg-amazon text-white p-3">
-          <div className="max-w-[1500px] mx-auto">
-            <Link href="/" className="text-xl font-bold">
-              Gadgets BD
-            </Link>
-          </div>
-        </nav>
         <main className="max-w-[600px] mx-auto w-full p-6 flex-1">
           <div className="bg-white border border-gray-300 rounded shadow-sm p-6">
             <h1 className="text-2xl font-normal mb-4">Your account</h1>
