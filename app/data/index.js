@@ -45,3 +45,4 @@ export { forgetPasswordData } from "./forgetPasswordData";
 export { loginData } from "./loginData";
 export { registerData } from "./registerData";
 export { reviewPageData } from "./reviewData";
+export { createPageData } from "./createData";
