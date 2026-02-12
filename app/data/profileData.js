@@ -2,7 +2,7 @@ export const profilePageData = {
   header: {
     sellerBadge: 'seller central',
     navLinks: [
-      { label: 'Catalog', href: '/manageList' },
+      { label: 'Manage', href: '/manageList' },
       { label: 'Orders', href: '/bookings' },
       { label: 'Shop Profile', href: '/profile', active: true },
     ],

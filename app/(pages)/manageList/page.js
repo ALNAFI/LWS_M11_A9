@@ -45,6 +45,7 @@ export default function ManageListPage() {
   useEffect(() => {
     if (!user || user.userType !== 'shopOwner') return
     const params = new URLSearchParams()
+    params.set('view', 'manage')
     if (filters.search) params.set('search', filters.search)
     if (filters.status !== 'All') params.set('status', filters.status)
     if (filters.category !== 'All Categories') params.set('category', filters.category)
@@ -58,6 +59,7 @@ export default function ManageListPage() {
   const refreshProducts = () => {
     if (!user || user.userType !== 'shopOwner') return
     const params = new URLSearchParams()
+    params.set('view', 'manage')
     if (filters.search) params.set('search', filters.search)
     if (filters.status !== 'All') params.set('status', filters.status)
     if (filters.category !== 'All Categories') params.set('category', filters.category)

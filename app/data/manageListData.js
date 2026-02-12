@@ -2,7 +2,7 @@ export const manageListPageData = {
   header: {
     sellerBadge: 'seller central',
     navLinks: [
-      { label: 'Catalog', href: '/manageList', active: true },
+      { label: 'Manage', href: '/manageList', active: true },
       { label: 'Orders', href: '/bookings' },
       { label: 'Shop Profile', href: '/profile' },
     ],

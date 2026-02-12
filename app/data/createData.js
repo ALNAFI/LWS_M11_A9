@@ -2,7 +2,7 @@ export const createPageData = {
   header: {
     sellerBadge: 'seller central',
     navLinks: [
-      { label: 'Catalog', href: '/manageList' },
+      { label: 'Manage', href: '/manageList' },
       { label: 'Orders', href: '/bookings' },
     ],
     userLabel: 'Shop Owner',
