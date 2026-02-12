@@ -5,10 +5,6 @@ import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Navbar from './Navbar'
 
-/**
- * Renders the customer Navbar only when the user is NOT a shop owner.
- * Shop owner pages (create, manageList, profile) have their own header; we hide the main nav there to avoid two navbars.
- */
 export default function NavbarWrapper() {
   const pathname = usePathname()
   const { data: session } = useSession()
@@ -29,7 +25,16 @@ export default function NavbarWrapper() {
       .finally(() => setLoading(false))
   }, [session, pathname])
 
+  // Hide navbar on auth pages (login, register, etc.)
+  if (pathname?.startsWith('/auth/')) return null
+
+  // Determine if current route is a Seller Central page
+  const sellerCentralPaths = ['/create', '/manageList', '/profile']
+  const isSellerCentralPath = sellerCentralPaths.some((p) => pathname?.startsWith(p))
   const isShopOwner = user?.userType === 'shopOwner' || session?.user?.userType === 'shopOwner'
-  if (isShopOwner) return null
+
+  // Hide main navbar only on Seller Central pages for shop owners
+  if (isShopOwner && isSellerCentralPath) return null
+
   return <Navbar />
 }

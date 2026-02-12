@@ -31,6 +31,14 @@ export const cardGridData = [
       category: 'Audio & Headphones',
     },
     {
+      type: 'single',
+      title: 'View all products',
+      image:
+        'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500',
+      linkText: 'View all products',
+      href: '/products',
+    },
+    {
       type: 'signin',
       title: 'Sign in for the best tech deals',
       buttonText: 'Sign in securely',
@@ -161,13 +169,13 @@ export const categoriesData = [
   ]
   
 export const brandData = [
-    'Apple',
-    'Samsung',
-    'Dell',
-    'HP',
-    'Lenovo',
-    'Sony',
-    'Razer',
-    'Logitech',
-  ]
+  { name: 'Apple', logo: '/images/Brand Img/apple.png' },
+  { name: 'Samsung', logo: '/images/Brand Img/samsung.png' },
+  { name: 'Dell', logo: '/images/Brand Img/dell.png' },
+  { name: 'HP', logo: '/images/Brand Img/hp.png' },
+  { name: 'Lenovo', logo: '/images/Brand Img/lenovo.png' },
+  { name: 'Sony', logo: '/images/Brand Img/sony.png' },
+  { name: 'Razer', logo: '/images/Brand Img/razer.png' },
+  { name: 'Logitech', logo: '/images/Brand Img/logitech.png' },
+]
   

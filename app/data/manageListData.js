@@ -3,7 +3,6 @@ export const manageListPageData = {
     sellerBadge: 'seller central',
     navLinks: [
       { label: 'Manage', href: '/manageList', active: true },
-      { label: 'Orders', href: '/bookings' },
       { label: 'Shop Profile', href: '/profile' },
     ],
     userLabel: 'Shop Owner',

@@ -1,7 +1,8 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
 
 function formatPrice(price) {
@@ -11,6 +12,21 @@ function formatPrice(price) {
 
 export default function ProductGrid({ products = [], loading = false }) {
   const { addItem } = useCart()
+  const { data: session } = useSession()
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    if (session?.user) {
+      setUser({ userType: session.user.userType })
+      return
+    }
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data) => setUser(data?.user ?? null))
+      .catch(() => setUser(null))
+  }, [session])
+
+  const isShopOwner = user?.userType === 'shopOwner' || session?.user?.userType === 'shopOwner'
 
   if (loading) {
     return (
@@ -74,12 +90,21 @@ export default function ProductGrid({ products = [], loading = false }) {
                 </p>
               )}
 
-              <button
-                onClick={() => addItem(product)}
-                className="mt-2 bg-amazon-yellow hover:bg-amazon-yellow_hover text-sm py-1.5 px-3 rounded-md shadow-sm font-medium border border-amazon-secondary transition-colors"
-              >
-                Add to Cart
-              </button>
+              {!isShopOwner ? (
+                <button
+                  onClick={() => addItem(product)}
+                  className="mt-2 bg-amazon-yellow hover:bg-amazon-yellow_hover text-sm py-1.5 px-3 rounded-md shadow-sm font-medium border border-amazon-secondary transition-colors"
+                >
+                  Add to Cart
+                </button>
+              ) : (
+                <Link
+                  href={`/details?productId=${product.id}`}
+                  className="inline-block mt-2 bg-white hover:bg-gray-50 text-sm py-1.5 px-3 rounded-md shadow-sm font-medium border border-gray-300 text-amazon-blue hover:text-amazon-orange transition-colors"
+                >
+                  View product details
+                </Link>
+              )}
             </div>
           </div>
         ))}

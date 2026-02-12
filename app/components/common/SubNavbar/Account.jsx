@@ -4,9 +4,10 @@ import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
+import { ChevronDown } from 'lucide-react'
 
 const MENU_SHOP_OWNER = [
-  { label: 'Home', href: '/' },
+  { label: 'Profile', href: '/profile' },
   { label: 'Add Product', href: '/create' },
   { label: 'Manage Products', href: '/manageList' },
   { label: 'Logout', href: null, isLogout: true },
@@ -62,6 +63,7 @@ export default function Account() {
       router.push('/')
       router.refresh()
     }
+    if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('auth:logout'))
   }
 
   if (loading) {
@@ -106,6 +108,11 @@ export default function Account() {
         <span className="text-sm font-bold text-white max-w-[120px] truncate hidden sm:inline">
           {displayName || 'Account'}
         </span>
+        <ChevronDown
+          className={`w-4 h-4 text-white hidden sm:inline transition-transform ${
+            menuOpen ? 'rotate-180' : ''
+          }`}
+        />
       </button>
 
       {menuOpen && (

@@ -32,6 +32,7 @@ export default function ShopOwnerNavUser({ displayName }) {
     await signOut({ callbackUrl: '/' })
     router.push('/')
     router.refresh()
+    if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('auth:logout'))
   }
 
   return (

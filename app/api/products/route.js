@@ -52,8 +52,13 @@ export async function GET(request) {
     const search = searchParams.get('search')?.trim()
     const category = searchParams.get('category')?.trim()
     const brand = searchParams.get('brand')?.trim()
+    const minRatingRaw = searchParams.get('minRating')
+    const priceSlug = searchParams.get('price')?.trim()
+    const availability = searchParams.get('availability')?.trim()
+    const condition = searchParams.get('condition')?.trim()
     const status = searchParams.get('status')?.trim()
     const view = searchParams.get('view')?.trim()
+    const sortParam = searchParams.get('sort')?.trim()
 
     await connectMongo()
 
@@ -86,10 +91,57 @@ export async function GET(request) {
     }
     if (category && category !== 'All Categories') filter.category = category
     if (brand && brand !== 'All Brands') filter.brand = brand
+    if (availability && availability !== 'All') filter.availability = availability
+    if (condition && condition !== 'All') filter.condition = condition
 
-    const sort = featured
-      ? { purchases: -1, createdAt: -1 }
-      : { createdAt: -1 }
+    // Price range by slug
+    const priceRanges = {
+      'under-10k': { max: 9999 },
+      '10k-25k': { min: 10000, max: 25000 },
+      '25k-50k': { min: 25000, max: 50000 },
+      '50k-100k': { min: 50000, max: 100000 },
+      'over-100k': { min: 100001 },
+    }
+    if (priceSlug && priceRanges[priceSlug]) {
+      const range = priceRanges[priceSlug]
+      filter.price = {}
+      if (range.min != null) filter.price.$gte = range.min
+      if (range.max != null) filter.price.$lte = range.max
+    }
+
+    // Optional rating filter: only include products whose average review rating >= minRating
+    let ratedProductIds = null
+    if (minRatingRaw != null) {
+      const minRating = Number(minRatingRaw)
+      if (!Number.isNaN(minRating) && minRating > 0) {
+        const Review = (await import('@/app/models/Review')).default
+        const ratingAgg = await Review.aggregate([
+          { $group: { _id: '$product', avg: { $avg: '$rating' } } },
+          { $match: { avg: { $gte: minRating } } },
+          { $project: { _id: 1 } },
+        ])
+        ratedProductIds = ratingAgg.map((r) => r._id)
+        if (ratedProductIds.length === 0) {
+          return NextResponse.json({ products: [] })
+        }
+        filter._id = { ...(filter._id || {}), $in: ratedProductIds }
+      }
+    }
+
+    let sort = { createdAt: -1 }
+    if (view === 'manage') {
+      sort = { createdAt: -1 }
+    } else if (sortParam === 'featured' || featured) {
+      sort = { purchases: -1, createdAt: -1 }
+    } else if (sortParam === 'price-asc') {
+      sort = { price: 1, createdAt: -1 }
+    } else if (sortParam === 'price-desc') {
+      sort = { price: -1, createdAt: -1 }
+    } else if (sortParam === 'rating') {
+      sort = { purchases: -1, createdAt: -1 }
+    } else {
+      sort = { createdAt: -1 }
+    }
     const products = await Product.find(filter).sort(sort).lean()
     return NextResponse.json({ products: products.map((p) => productToJson(p)) })
   } catch (err) {

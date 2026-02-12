@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { Footer } from '@/app/components/common'
 import Breadcrumbs from '@/app/components/common/Breadcrumbs'
 import ImageGallery from '@/app/components/details/ImageGallery'
@@ -13,10 +14,23 @@ import RelatedProducts from '@/app/components/details/RelatedProducts'
 export default function DetailsPageClient() {
   const searchParams = useSearchParams()
   const productId = searchParams.get('productId')
+  const { data: session } = useSession()
   const [product, setProduct] = useState(null)
   const [shop, setShop] = useState(null)
+  const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+    if (session?.user) {
+      setUser({ userType: session.user.userType })
+      return
+    }
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data) => setUser(data?.user ?? null))
+      .catch(() => setUser(null))
+  }, [session])
 
   useEffect(() => {
     if (!productId) {
@@ -79,7 +93,9 @@ export default function DetailsPageClient() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <ImageGallery product={product} />
           <ProductInfo product={product} shop={shop} />
-          <BuyBox product={product} shop={shop} />
+          {user?.userType !== 'shopOwner' && session?.user?.userType !== 'shopOwner' && (
+            <BuyBox product={product} shop={shop} />
+          )}
         </div>
         <TabsSection
           product={product}

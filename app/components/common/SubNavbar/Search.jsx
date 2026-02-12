@@ -1,21 +1,77 @@
 'use client'
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React, { useState, useEffect, useRef } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { SearchIcon } from 'lucide-react'
 import { categoryFilterData } from '@/app/data'
 
+const LIVE_SEARCH_DEBOUNCE_MS = 700
+
 export default function Search() {
   const router = useRouter()
-  const [keyword, setKeyword] = useState('')
-  const [category, setCategory] = useState('All Categories')
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const urlSearch = searchParams.get('search') ?? ''
+  const urlCategory = searchParams.get('category') ?? ''
+
+  const [keyword, setKeyword] = useState(urlSearch)
+  const [category, setCategory] = useState(urlCategory || 'All Categories')
+  const liveSearchTimerRef = useRef(null)
+
+  useEffect(() => {
+    setKeyword(urlSearch)
+    setCategory(urlCategory && urlCategory !== 'All Categories' ? urlCategory : 'All Categories')
+  }, [urlSearch, urlCategory])
+
+  useEffect(() => {
+    return () => {
+      if (liveSearchTimerRef.current) clearTimeout(liveSearchTimerRef.current)
+    }
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const params = new URLSearchParams()
+    if (liveSearchTimerRef.current) {
+      clearTimeout(liveSearchTimerRef.current)
+      liveSearchTimerRef.current = null
+    }
+    const params = new URLSearchParams(searchParams.toString())
     if (keyword.trim()) params.set('search', keyword.trim())
+    else params.delete('search')
     if (category && category !== 'All Categories') params.set('category', category)
+    else params.delete('category')
     router.push(`/products${params.toString() ? `?${params.toString()}` : ''}`)
+  }
+
+  const handleInputChange = (e) => {
+    const value = e.target.value
+    setKeyword(value)
+
+    if (value === '') {
+      if (pathname === '/products') {
+        const params = new URLSearchParams(searchParams.toString())
+        params.delete('search')
+        router.push(params.toString() ? `/products?${params.toString()}` : '/products')
+      }
+      if (liveSearchTimerRef.current) {
+        clearTimeout(liveSearchTimerRef.current)
+        liveSearchTimerRef.current = null
+      }
+      return
+    }
+
+    if (liveSearchTimerRef.current) clearTimeout(liveSearchTimerRef.current)
+    const trimmed = value.trim()
+    if (!trimmed) return
+
+    liveSearchTimerRef.current = setTimeout(() => {
+      liveSearchTimerRef.current = null
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('search', trimmed)
+      if (category && category !== 'All Categories') params.set('category', category)
+      else params.delete('category')
+      router.push(`/products?${params.toString()}`)
+    }, LIVE_SEARCH_DEBOUNCE_MS)
   }
 
   return (
@@ -33,7 +89,7 @@ export default function Search() {
       <input
         type="text"
         value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
+        onChange={handleInputChange}
         placeholder="Search Gadgets, Laptops, Phones..."
         className="flex-1 px-3 text-black outline-none"
       />

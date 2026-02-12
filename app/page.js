@@ -1,7 +1,12 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import { Footer } from "./components/common";
-import BrandSection from "./components/home/BrandSection";
 import CategoriesSection from "./components/home/CategoriesSection";
+
+const BrandSection = dynamic(
+  () => import("./components/home/BrandSection"),
+  { ssr: false }
+);
 import WhyUsSection from "./components/home/WhyUsSection";
 import HeroBanner from "./components/home/HeroBanner";
 import ContentGrid from "./components/home/ContentGrid";

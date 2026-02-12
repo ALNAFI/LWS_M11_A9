@@ -9,6 +9,12 @@ export default function ProductsPageClient() {
   const searchParams = useSearchParams()
   const search = searchParams.get('search') || ''
   const category = searchParams.get('category') || ''
+  const brand = searchParams.get('brand') || ''
+  const minRating = searchParams.get('minRating') || ''
+  const price = searchParams.get('price') || ''
+  const availability = searchParams.get('availability') || ''
+  const condition = searchParams.get('condition') || ''
+  const sort = searchParams.get('sort') || ''
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -17,6 +23,12 @@ export default function ProductsPageClient() {
     const params = new URLSearchParams()
     if (search) params.set('search', search)
     if (category) params.set('category', category)
+    if (brand) params.set('brand', brand)
+    if (minRating) params.set('minRating', minRating)
+    if (price) params.set('price', price)
+    if (availability) params.set('availability', availability)
+    if (condition) params.set('condition', condition)
+    if (sort) params.set('sort', sort)
     const query = params.toString()
     fetch(query ? `/api/products?${query}` : '/api/products')
       .then((res) => res.json())
@@ -25,7 +37,7 @@ export default function ProductsPageClient() {
       })
       .catch(() => setProducts([]))
       .finally(() => setLoading(false))
-  }, [search, category])
+  }, [search, category, brand, minRating, price, availability, condition, sort])
 
   return (
     <>

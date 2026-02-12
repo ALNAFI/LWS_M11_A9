@@ -8,6 +8,7 @@ export const brandFilterData = {
       'Lenovo',
       'Sony',
       'Razer',
+      'Logitech',
     ],
   }
 
@@ -36,15 +37,15 @@ export const categoryFilterData = {
   }
   
 export const priceData = {
-    title: 'Price',
-    options: [
-      'Under ৳10,000',
-      '৳10,000 - ৳25,000',
-      '৳25,000 - ৳50,000',
-      '৳50,000 - ৳1,00,000',
-      'Over ৳1,00,000',
-    ],
-  }
+  title: 'Price',
+  options: [
+    { label: 'Under ৳10,000', value: 'under-10k' },
+    { label: '৳10,000 - ৳25,000', value: '10k-25k' },
+    { label: '৳25,000 - ৳50,000', value: '25k-50k' },
+    { label: '৳50,000 - ৳1,00,000', value: '50k-100k' },
+    { label: 'Over ৳1,00,000', value: 'over-100k' },
+  ],
+}
   
 export const availabilityData = {
     title: 'Availability',

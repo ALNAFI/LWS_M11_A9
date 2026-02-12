@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
 
 function formatPrice(price) {
@@ -12,6 +13,21 @@ function formatPrice(price) {
 export default function RelatedProducts({ product }) {
   const [items, setItems] = useState([])
   const { addItem } = useCart()
+  const { data: session } = useSession()
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    if (session?.user) {
+      setUser({ userType: session.user.userType })
+      return
+    }
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((res) => (res.ok ? res.json() : { user: null }))
+      .then((data) => setUser(data?.user ?? null))
+      .catch(() => setUser(null))
+  }, [session])
+
+  const isShopOwner = user?.userType === 'shopOwner' || session?.user?.userType === 'shopOwner'
 
   useEffect(() => {
     if (!product?.category || !product?.id) return
@@ -54,14 +70,23 @@ export default function RelatedProducts({ product }) {
               </p>
             </Link>
             <p className="text-sm font-bold mb-2">{formatPrice(p.price)}</p>
-            <button
-              type="button"
-              onClick={() => addItem(p)}
-              disabled={(p.stockQuantity ?? 0) < 1}
-              className="w-full bg-amazon-yellow hover:bg-amazon-yellow_hover text-xs py-1.5 rounded border border-amazon-secondary disabled:opacity-50"
-            >
-              Add to Cart
-            </button>
+            {!isShopOwner ? (
+              <button
+                type="button"
+                onClick={() => addItem(p)}
+                disabled={(p.stockQuantity ?? 0) < 1}
+                className="w-full bg-amazon-yellow hover:bg-amazon-yellow_hover text-xs py-1.5 rounded border border-amazon-secondary disabled:opacity-50"
+              >
+                Add to Cart
+              </button>
+            ) : (
+              <Link
+                href={`/details?productId=${p.id}`}
+                className="block w-full text-center bg-white hover:bg-gray-50 text-xs py-1.5 rounded border border-gray-300 text-amazon-blue hover:text-amazon-orange"
+              >
+                View details
+              </Link>
+            )}
           </div>
         ))}
       </div>
