@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Footer } from '@/app/components/common'
 import NavResults from '@/app/components/bookings/NavResults'
 import BookingsPageHeader from '@/app/components/bookings/BookingsPageHeader'
@@ -11,40 +11,41 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
+  const fetchOrders = useCallback(async () => {
     let cancelled = false
-    async function load() {
-      try {
-        setLoading(true)
-        setError(null)
-        const res = await fetch('/api/orders', { credentials: 'include' })
-        if (!res.ok) {
-          if (res.status === 401) {
-            setError('Please sign in to view your orders.')
-          } else {
-            setError('Failed to load orders. Please try again.')
-          }
-          setOrders([])
-          return
-        }
-        const data = await res.json().catch(() => ({}))
-        if (!cancelled) {
-          setOrders(Array.isArray(data.orders) ? data.orders : [])
-        }
-      } catch (_) {
-        if (!cancelled) {
+    try {
+      setLoading(true)
+      setError(null)
+      const res = await fetch('/api/orders', { credentials: 'include' })
+      if (!res.ok) {
+        if (res.status === 401) {
+          setError('Please sign in to view your orders.')
+        } else {
           setError('Failed to load orders. Please try again.')
-          setOrders([])
         }
-      } finally {
-        if (!cancelled) setLoading(false)
+        setOrders([])
+        return
       }
+      const data = await res.json().catch(() => ({}))
+      if (!cancelled) {
+        setOrders(Array.isArray(data.orders) ? data.orders : [])
+      }
+    } catch (_) {
+      if (!cancelled) {
+        setError('Failed to load orders. Please try again.')
+        setOrders([])
+      }
+    } finally {
+      if (!cancelled) setLoading(false)
     }
-    load()
     return () => {
       cancelled = true
     }
   }, [])
+
+  useEffect(() => {
+    fetchOrders()
+  }, [fetchOrders])
 
   return (
     <>
@@ -70,6 +71,7 @@ export default function BookingsPage() {
               key={order.orderId || order.id}
               order={order}
               isShopView={order.isShopView}
+              onOrderCancelled={fetchOrders}
             />
           ))}
         </div>
