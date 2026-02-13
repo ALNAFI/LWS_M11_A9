@@ -3,6 +3,7 @@ import connectMongo from '@/app/dbConnect/connectMongo'
 import Order from '@/app/models/Order'
 import Product from '@/app/models/Product'
 import User from '@/app/models/User'
+import Cart from '@/app/models/Cart'
 import { getAccessTokenFromRequest, verifyAccessToken } from '@/app/lib/tokens'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/lib/auth'
@@ -231,6 +232,20 @@ export async function POST(request) {
       await Product.findByIdAndUpdate(it.productId, {
         $inc: { stockQuantity: -it.quantity, purchases: it.quantity },
       })
+    }
+
+    // Remove purchased items from the user's cart
+    try {
+      const purchasedIds = orderItems.map((it) => it.productId)
+      if (purchasedIds.length > 0) {
+        await Cart.findOneAndUpdate(
+          { user: currentUser.id },
+          { $pull: { items: { productId: { $in: purchasedIds } } } },
+          { new: true }
+        )
+      }
+    } catch (cartErr) {
+      console.error('Failed to remove purchased items from cart:', cartErr)
     }
 
     const orderId = order._id.toString()

@@ -10,26 +10,22 @@ const iconMap = {
   XCircle,
 }
 
-async function downloadInvoice(orderId) {
-  const res = await fetch(`/api/orders/${orderId}/invoice`)
-  if (!res.ok) throw new Error('Failed to download invoice')
-  const blob = await res.blob()
-  const disposition = res.headers.get('Content-Disposition')
-  const match = disposition && disposition.match(/filename="?([^";]+)"?/)
-  const filename = match ? match[1] : `invoice-${orderId}.pdf`
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+function downloadInvoice(orderId) {
+  if (!orderId) return
+  // Trigger a single download without navigating away using a hidden iframe
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = `/api/orders/${orderId}/invoice`
+  document.body.appendChild(iframe)
+  setTimeout(() => {
+    if (iframe.parentNode) iframe.parentNode.removeChild(iframe)
+  }, 15000)
 }
 
 export default function OrderProductActions({ actions }) {
   const router = useRouter()
   const [downloadingId, setDownloadingId] = useState(null)
+  const [successOrderId, setSuccessOrderId] = useState(null)
 
   const handleClick = async (action) => {
     if (action.actionType === 'print') {
@@ -37,8 +33,11 @@ export default function OrderProductActions({ actions }) {
     }
     if (action.actionType === 'download' && action.orderId) {
       setDownloadingId(action.orderId)
+      setSuccessOrderId(null)
       try {
         await downloadInvoice(action.orderId)
+        setSuccessOrderId(action.orderId)
+        setTimeout(() => setSuccessOrderId(null), 3000)
       } catch (_) {}
       setDownloadingId(null)
     }
@@ -48,7 +47,7 @@ export default function OrderProductActions({ actions }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2 mt-4">
+    <div className="flex flex-wrap gap-2 mt-4 items-center">
       {actions.map((action) => {
         const IconComponent = action.icon ? iconMap[action.icon] : null
         const isDanger = action.variant === 'danger'
@@ -80,6 +79,9 @@ export default function OrderProductActions({ actions }) {
           </button>
         )
       })}
+      {successOrderId && (
+        <span className="text-xs text-green-600 ml-1">Invoice downloaded successfully.</span>
+      )}
     </div>
   )
 }

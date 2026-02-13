@@ -9,6 +9,7 @@ import OrderSummary from '@/app/components/paymentProcess/OrderSummary'
 import ProductsList from '@/app/components/paymentProcess/ProductsList'
 import AddressSummary from '@/app/components/paymentProcess/AddressSummary'
 import EditOrderModal from '@/app/components/paymentProcess/EditOrderModal'
+import { useCart } from '@/app/context/CartContext'
 
 const CHECKOUT_STORAGE_KEY = 'gadgetsbd_checkout_items'
 const CHECKOUT_ADDRESS_KEY = 'gadgetsbd_checkout_address'
@@ -22,6 +23,7 @@ const DEFAULT_ADDRESS = {
 
 export default function PaymentProcessPage() {
   const router = useRouter()
+  const { setItems } = useCart()
   const [checkoutItems, setCheckoutItems] = useState(null)
   const [address, setAddress] = useState(DEFAULT_ADDRESS)
   const [placing, setPlacing] = useState(false)
@@ -119,6 +121,12 @@ export default function PaymentProcessPage() {
                 try {
                   sessionStorage.removeItem(CHECKOUT_STORAGE_KEY)
                   sessionStorage.removeItem(CHECKOUT_ADDRESS_KEY)
+                  // Clear purchased items from client cart immediately
+                  setItems((prev) =>
+                    prev.filter(
+                      (cartItem) => !checkoutItems.some((ci) => ci.id === cartItem.id)
+                    )
+                  )
                 } catch (_) {}
                 router.push(`/success?orderId=${encodeURIComponent(data.orderId || '')}`)
               } catch (err) {

@@ -130,6 +130,7 @@ export function CartProvider({ children }) {
     setQuantity,
     removeItem,
     addItem,
+    setItems, // expose for advanced flows like clearing after checkout
     selectedItems,
     selectedSubtotal,
   }

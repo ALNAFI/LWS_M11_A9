@@ -7,21 +7,17 @@ import { orderPlacedData } from '@/app/data'
 
 const actionIconMap = { Download: DownloadIcon }
 
-async function downloadInvoice(orderId) {
-  const res = await fetch(`/api/orders/${orderId}/invoice`)
-  if (!res.ok) throw new Error('Failed to download invoice')
-  const blob = await res.blob()
-  const disposition = res.headers.get('Content-Disposition')
-  const match = disposition && disposition.match(/filename="?([^";]+)"?/)
-  const filename = match ? match[1] : `invoice-${orderId}.pdf`
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+function downloadInvoice(orderId) {
+  if (!orderId) return
+  // Trigger a single download without navigating away using a hidden iframe
+  const iframe = document.createElement('iframe')
+  iframe.style.display = 'none'
+  iframe.src = `/api/orders/${orderId}/invoice`
+  document.body.appendChild(iframe)
+  // Clean up after some time
+  setTimeout(() => {
+    if (iframe.parentNode) iframe.parentNode.removeChild(iframe)
+  }, 15000)
 }
 
 function formatDate(createdAt) {
@@ -36,12 +32,16 @@ function formatDate(createdAt) {
 function DownloadInvoiceButton({ order, action, IconComponent, isDownload }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
   const handleClick = async () => {
     if (!isDownload || !order?.id) return
     setError(null)
+    setSuccess(false)
     setLoading(true)
     try {
       await downloadInvoice(order.id)
+      setSuccess(true)
+      setTimeout(() => setSuccess(false), 3000)
     } catch (e) {
       setError(e.message || 'Download failed')
     } finally {
@@ -60,6 +60,7 @@ function DownloadInvoiceButton({ order, action, IconComponent, isDownload }) {
         {loading ? 'Downloading...' : action.label}
       </button>
       {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+      {success && <p className="text-xs text-green-600 mt-1">Invoice downloaded successfully.</p>}
     </div>
   )
 }
