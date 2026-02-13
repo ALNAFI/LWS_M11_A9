@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { AuthLogo } from "@/app/components/auth/forgetPassword";
 import {
   LoginForm,
@@ -16,7 +16,9 @@ export default function LoginPage() {
           <AuthBackButton />
         </div>
         <AuthLogo />
-        <LoginForm />
+        <Suspense fallback={<div className="w-full max-w-[400px] h-10 bg-gray-100 rounded animate-pulse" />}>
+          <LoginForm />
+        </Suspense>
         <AuthDivider />
         <CreateAccountCta />
       </div>

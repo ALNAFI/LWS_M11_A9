@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import connectMongo from '@/app/dbConnect/connectMongo'
 import Cart from '@/app/models/Cart'
+
+export const dynamic = 'force-dynamic'
 import User from '@/app/models/User'
 import { getAccessTokenFromRequest, verifyAccessToken } from '@/app/lib/tokens'
 import { getServerSession } from 'next-auth/next'
