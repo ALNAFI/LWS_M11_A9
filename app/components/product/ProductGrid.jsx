@@ -11,7 +11,7 @@ function formatPrice(price) {
 }
 
 export default function ProductGrid({ products = [], loading = false }) {
-  const { addItem } = useCart()
+  const { items, addItem, removeItem } = useCart()
   const { data: session } = useSession()
   const [user, setUser] = useState(null)
 
@@ -47,7 +47,9 @@ export default function ProductGrid({ products = [], loading = false }) {
   return (
     <div className="flex-1">
       <div className="space-y-4">
-        {products.map((product) => (
+        {products.map((product) => {
+          const isInCart = items.some((item) => item.id === product.id)
+          return (
           <div
             key={product.id}
             className="flex gap-4 p-4 border rounded hover:shadow-md transition"
@@ -92,10 +94,16 @@ export default function ProductGrid({ products = [], loading = false }) {
 
               {!isShopOwner ? (
                 <button
-                  onClick={() => addItem(product)}
-                  className="mt-2 bg-amazon-yellow hover:bg-amazon-yellow_hover text-sm py-1.5 px-3 rounded-md shadow-sm font-medium border border-amazon-secondary transition-colors"
+                  onClick={() =>
+                    isInCart ? removeItem(product.id) : addItem(product)
+                  }
+                  className={`mt-2 text-sm py-1.5 px-3 rounded-md shadow-sm font-medium border transition-colors ${
+                    isInCart
+                      ? 'bg-white border-red-500 text-red-600 hover:bg-red-50'
+                      : 'bg-amazon-yellow hover:bg-amazon-yellow_hover border-amazon-secondary text-black'
+                  }`}
                 >
-                  Add to Cart
+                  {isInCart ? 'Remove from Cart' : 'Add to Cart'}
                 </button>
               ) : (
                 <Link
@@ -107,7 +115,7 @@ export default function ProductGrid({ products = [], loading = false }) {
               )}
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   )
