@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
 
@@ -13,6 +14,7 @@ function formatPrice(price) {
 export default function ProductGrid({ products = [], loading = false }) {
   const { items, addItem, removeItem } = useCart()
   const { data: session } = useSession()
+  const router = useRouter()
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -49,6 +51,7 @@ export default function ProductGrid({ products = [], loading = false }) {
       <div className="space-y-4">
         {products.map((product) => {
           const isInCart = items.some((item) => item.id === product.id)
+          const isLoggedIn = !!session?.user
           return (
           <div
             key={product.id}
@@ -94,9 +97,18 @@ export default function ProductGrid({ products = [], loading = false }) {
 
               {!isShopOwner ? (
                 <button
-                  onClick={() =>
-                    isInCart ? removeItem(product.id) : addItem(product)
-                  }
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      const redirectUrl = `/details?productId=${product.id}`
+                      router.push(`/auth/login?redirect=${encodeURIComponent(redirectUrl)}`)
+                      return
+                    }
+                    if (isInCart) {
+                      removeItem(product.id)
+                    } else {
+                      addItem(product)
+                    }
+                  }}
                   className={`mt-2 text-sm py-1.5 px-3 rounded-md shadow-sm font-medium border transition-colors ${
                     isInCart
                       ? 'bg-white border-red-500 text-red-600 hover:bg-red-50'

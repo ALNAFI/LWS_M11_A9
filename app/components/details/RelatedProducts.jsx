@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
 
@@ -11,8 +12,9 @@ function formatPrice(price) {
 }
 
 export default function RelatedProducts({ product }) {
-  const [items, setItems] = useState([])
-  const { addItem } = useCart()
+  const [relatedItems, setRelatedItems] = useState([])
+  const { items: cartItems, addItem, removeItem } = useCart()
+  const router = useRouter()
   const { data: session } = useSession()
   const [user, setUser] = useState(null)
 
@@ -37,18 +39,21 @@ export default function RelatedProducts({ product }) {
       .then((res) => res.json())
       .then((data) => {
         const list = (data.products || []).filter((p) => p.id !== product.id).slice(0, 6)
-        setItems(list)
+        setRelatedItems(list)
       })
-      .catch(() => setItems([]))
+      .catch(() => setRelatedItems([]))
   }, [product?.id, product?.category])
 
-  if (!product || items.length === 0) return null
+  if (!product || relatedItems.length === 0) return null
 
   return (
     <div className="mt-12 border-t border-gray-200 pt-8">
       <h2 className="text-xl font-bold mb-6">Related Products</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {items.map((p) => (
+        {relatedItems.map((p) => {
+          const isInCart = cartItems.some((item) => item.id === p.id)
+          const isLoggedIn = !!session?.user
+          return (
           <div
             key={p.id}
             className="border border-gray-200 rounded p-3 hover:shadow-md transition"
@@ -73,11 +78,26 @@ export default function RelatedProducts({ product }) {
             {!isShopOwner ? (
               <button
                 type="button"
-                onClick={() => addItem(p)}
+                onClick={() => {
+                  if (!isLoggedIn) {
+                    const redirectUrl = `/details?productId=${p.id}`
+                    router.push(`/auth/login?redirect=${encodeURIComponent(redirectUrl)}`)
+                    return
+                  }
+                  if (isInCart) {
+                    removeItem(p.id)
+                  } else {
+                    addItem(p)
+                  }
+                }}
                 disabled={(p.stockQuantity ?? 0) < 1}
-                className="w-full bg-amazon-yellow hover:bg-amazon-yellow_hover text-xs py-1.5 rounded border border-amazon-secondary disabled:opacity-50"
+                className={`w-full text-xs py-1.5 rounded border disabled:opacity-50 ${
+                  isInCart
+                    ? 'bg-white border-red-500 text-red-600 hover:bg-red-50'
+                    : 'bg-amazon-yellow hover:bg-amazon-yellow_hover border-amazon-secondary'
+                }`}
               >
-                Add to Cart
+                {isInCart ? 'Remove from Cart' : 'Add to Cart'}
               </button>
             ) : (
               <Link
@@ -88,7 +108,7 @@ export default function RelatedProducts({ product }) {
               </Link>
             )}
           </div>
-        ))}
+        )})}
       </div>
     </div>
   )

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { ShieldCheckIcon, TruckIcon, PackageIcon } from 'lucide-react'
 import { useCart } from '@/app/context/CartContext'
 
@@ -26,6 +27,7 @@ function checkoutItemFromProduct(product, quantity, shop) {
 
 export default function BuyBox({ product, shop }) {
   const router = useRouter()
+  const { data: session } = useSession()
   const { items, addItem, removeItem } = useCart()
   const [quantity, setQuantity] = useState(1)
   const inCart = product ? items.some((i) => i.id === product.id) : false
@@ -36,6 +38,12 @@ export default function BuyBox({ product, shop }) {
   if (!product) return null
 
   const handleAddToCart = () => {
+    const isLoggedIn = !!session?.user
+    if (!isLoggedIn) {
+      const redirectUrl = `/details?productId=${product.id}`
+      router.push(`/auth/login?redirect=${encodeURIComponent(redirectUrl)}`)
+      return
+    }
     if (inCart) removeItem(product.id)
     else addItem(product, quantity)
   }

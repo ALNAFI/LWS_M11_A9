@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
 
 function formatPrice(price) {
@@ -12,7 +14,9 @@ function formatPrice(price) {
 export default function FeaturedProduct() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
-  const { addItem } = useCart()
+  const { items, addItem, removeItem } = useCart()
+  const { data: session } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     fetch('/api/products?featured=1')
@@ -38,7 +42,10 @@ export default function FeaturedProduct() {
       </div>
 
       <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-hide">
-        {products.map((product) => (
+        {products.map((product) => {
+          const isInCart = items.some((item) => item.id === product.id)
+          const isLoggedIn = !!session?.user
+          return (
           <div key={product.id} className="flex-none w-48">
             <Link href={`/details?productId=${product.id}`}>
               <div className="bg-gray-50 h-48 flex items-center justify-center mb-2 p-2">
@@ -69,13 +76,28 @@ export default function FeaturedProduct() {
             </div>
 
             <button
-              onClick={() => addItem(product)}
-              className="w-full bg-amazon-yellow hover:bg-amazon-yellow_hover text-sm py-1.5 rounded-md shadow-sm font-medium border border-amazon-secondary transition-colors"
+              onClick={() => {
+                if (!isLoggedIn) {
+                  const redirectUrl = `/details?productId=${product.id}`
+                  router.push(`/auth/login?redirect=${encodeURIComponent(redirectUrl)}`)
+                  return
+                }
+                if (isInCart) {
+                  removeItem(product.id)
+                } else {
+                  addItem(product)
+                }
+              }}
+              className={`w-full text-sm py-1.5 rounded-md shadow-sm font-medium border transition-colors ${
+                isInCart
+                  ? 'bg-white border-red-500 text-red-600 hover:bg-red-50'
+                  : 'bg-amazon-yellow hover:bg-amazon-yellow_hover border-amazon-secondary text-black'
+              }`}
             >
-              Add to Cart
+              {isInCart ? 'Remove from Cart' : 'Add to Cart'}
             </button>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   )

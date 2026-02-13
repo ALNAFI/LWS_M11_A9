@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 import { loginData } from '@/app/data'
 import ContinueWithGoogle from '@/app/components/auth/ContinueWithGoogle'
@@ -12,9 +12,11 @@ const inputClassName =
 
 export default function LoginForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const { form, disclaimer, helpLink } = loginData
+  const redirect = searchParams.get('redirect')
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -37,7 +39,8 @@ export default function LoginForm() {
         return
       }
       const isShopOwner = data.user?.userType === 'shopOwner'
-      router.push(isShopOwner ? '/profile' : '/')
+      const defaultUrl = isShopOwner ? '/profile' : '/'
+      router.push(redirect || defaultUrl)
       router.refresh()
     } catch {
       setError('Something went wrong. Please try again.')
@@ -109,7 +112,7 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <ContinueWithGoogle callbackUrl="/" />
+      <ContinueWithGoogle callbackUrl={redirect || '/'} />
 
       <div className="mt-4 text-xs">
         <p>
