@@ -123,12 +123,14 @@ export default function ReviewsTab({ product }) {
   if (!product) return null
 
   const hasMore = reviews.length < total
+  const userReview = reviews.find((r) => r.isOwn)
+  const hasAlreadyReviewed = !!userReview
 
   return (
     <div className="tab-content" role="tabpanel" aria-labelledby="tab-reviews">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold">Customer Reviews</h2>
-        {hasPurchased && (
+        {hasPurchased && !hasAlreadyReviewed && (
           <button
             type="button"
             onClick={openNew}
@@ -136,6 +138,11 @@ export default function ReviewsTab({ product }) {
           >
             Write a Review
           </button>
+        )}
+        {hasPurchased && hasAlreadyReviewed && (
+          <p className="text-sm text-gray-700">
+            You have already reviewed this product.
+          </p>
         )}
       </div>
 
