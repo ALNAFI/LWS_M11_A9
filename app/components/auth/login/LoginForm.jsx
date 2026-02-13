@@ -9,23 +9,51 @@ import ContinueWithGoogle from '@/app/components/auth/ContinueWithGoogle'
 
 const inputClassName =
   'w-full px-2 py-1.5 border border-gray-400 rounded-sm outline-none focus:ring-1 focus:ring-amazon-secondary focus:border-amazon-secondary'
+const inputErrorClassName =
+  'w-full px-2 py-1.5 border border-red-500 rounded-sm outline-none focus:ring-1 focus:ring-red-500 focus:border-red-500'
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+function validateEmail(value) {
+  const trimmed = typeof value === 'string' ? value.trim() : ''
+  if (!trimmed) return 'Email is required.'
+  if (!EMAIL_REGEX.test(trimmed)) return 'Please enter a valid email address.'
+  return ''
+}
+
+function validatePassword(value) {
+  if (value == null || String(value).trim() === '') return 'Password is required.'
+  return ''
+}
 
 export default function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { form, disclaimer, helpLink } = loginData
   const redirect = searchParams.get('redirect')
 
+  function validateForm(email, password) {
+    const emailErr = validateEmail(email)
+    const passwordErr = validatePassword(password)
+    setFieldErrors({ email: emailErr, password: passwordErr })
+    return !emailErr && !passwordErr
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-    setLoading(true)
+    setFieldErrors({ email: '', password: '' })
     const fd = new FormData(e.target)
     const email = fd.get('email')
     const password = fd.get('password')
+
+    if (!validateForm(email, password)) return
+
+    setLoading(true)
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -60,64 +88,77 @@ export default function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {form.fields.map((field) => (
-          <div key={field.id}>
-            {field.rightLink ? (
-              <div className="flex justify-between mb-1">
+        {form.fields.map((field) => {
+          const hasError = fieldErrors[field.id]
+          const inputClass = hasError ? inputErrorClassName : inputClassName
+          return (
+            <div key={field.id}>
+              {field.rightLink ? (
+                <div className="flex justify-between mb-1">
+                  <label
+                    htmlFor={field.id}
+                    className="text-sm font-bold"
+                  >
+                    {field.label}
+                  </label>
+                  <Link
+                    href={field.rightLink.href}
+                    className="text-sm text-amazon-blue hover:text-amazon-orange hover:underline"
+                  >
+                    {field.rightLink.label}
+                  </Link>
+                </div>
+              ) : (
                 <label
                   htmlFor={field.id}
-                  className="text-sm font-bold"
+                  className="block text-sm font-bold mb-1"
                 >
                   {field.label}
                 </label>
-                <Link
-                  href={field.rightLink.href}
-                  className="text-sm text-amazon-blue hover:text-amazon-orange hover:underline"
-                >
-                  {field.rightLink.label}
-                </Link>
-              </div>
-            ) : (
-              <label
-                htmlFor={field.id}
-                className="block text-sm font-bold mb-1"
-              >
-                {field.label}
-              </label>
-            )}
-            {field.type === 'password' ? (
-              <div className="relative">
+              )}
+              {field.type === 'password' ? (
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id={field.id}
+                    name={field.id}
+                    required={field.required}
+                    className={`${inputClass} pr-10`}
+                    aria-invalid={!!hasError}
+                    aria-describedby={hasError ? `${field.id}-error` : undefined}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((p) => !p)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              ) : (
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={field.type}
                   id={field.id}
                   name={field.id}
                   required={field.required}
-                  className={`${inputClassName} pr-10`}
+                  className={inputClass}
+                  aria-invalid={!!hasError}
+                  aria-describedby={hasError ? `${field.id}-error` : undefined}
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword((p) => !p)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 focus:outline-none"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-            ) : (
-              <input
-                type={field.type}
-                id={field.id}
-                name={field.id}
-                required={field.required}
-                className={inputClassName}
-              />
-            )}
-          </div>
-        ))}
+              )}
+              {hasError && (
+                <p id={`${field.id}-error`} className="mt-1 text-xs text-red-600" role="alert">
+                  {hasError}
+                </p>
+              )}
+            </div>
+          )
+        })}
 
         <button
           type="submit"

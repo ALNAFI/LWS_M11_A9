@@ -252,7 +252,7 @@ export async function POST(request) {
     const orderNumber = `#GB-${orderId.slice(-8).toUpperCase()}`
 
     try {
-      const user = await User.findById(currentUser.id).select('email').lean()
+      const user = await User.findById(currentUser.id).select('name email').lean()
       if (user?.email) {
         await sendInvoiceEmail({
           to: user.email,
@@ -264,6 +264,8 @@ export async function POST(request) {
           deliveryFee,
           serviceFee,
           orderTotal,
+          customerName: user.name || shippingAddress.name,
+          date: order.createdAt,
         })
       }
     } catch (emailErr) {

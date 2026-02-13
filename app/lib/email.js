@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import { generateInvoicePdfBuffer } from '@/app/lib/invoicePdf'
 
 function getTransport() {
   const user = process.env.SMTP_USER || process.env.GMAIL_USER
@@ -69,7 +70,7 @@ export async function sendPasswordResetEmail({ to, resetLink }) {
   })
 }
 
-export async function sendInvoiceEmail({ to, orderId, orderNumber, address, items, itemsSubtotal, deliveryFee, serviceFee, orderTotal }) {
+export async function sendInvoiceEmail({ to, orderId, orderNumber, address, items, itemsSubtotal, deliveryFee, serviceFee, orderTotal, customerName, date }) {
   const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@gadgetsbd.com'
   const appName = 'Gadgets BD'
 
@@ -83,7 +84,7 @@ export async function sendInvoiceEmail({ to, orderId, orderNumber, address, item
   const html = `
     <div style="font-family:sans-serif;max-width:600px;">
       <h2 style="color:#232f3e;">${appName} – Order Confirmation</h2>
-      <p>Thank you for your order. Your invoice is below.</p>
+      <p>Thank you for your order. Your invoice PDF is attached to this email.</p>
       <p><strong>Order Number:</strong> ${escapeHtml(orderNumber)}</p>
       <p><strong>Shipping address:</strong><br/>${addressBlock}</p>
       <table style="width:100%;border-collapse:collapse;margin:16px 0;" border="1" cellpadding="8">
@@ -97,13 +98,35 @@ export async function sendInvoiceEmail({ to, orderId, orderNumber, address, item
       <p style="margin-top:24px;color:#666;">— ${appName}</p>
     </div>
   `
+
+  let attachments = []
+  try {
+    const pdfBuffer = await generateInvoicePdfBuffer({
+      orderNumber,
+      date: date || new Date(),
+      customerName: customerName || addr.name || 'Customer',
+      customerEmail: to,
+      address: addr,
+      items: items || [],
+      itemsSubtotal: itemsSubtotal || 0,
+      deliveryFee: deliveryFee ?? 0,
+      serviceFee: serviceFee || 0,
+      orderTotal: orderTotal || 0,
+    })
+    const filename = `Invoice_${orderNumber.replace('#', '')}.pdf`
+    attachments = [{ filename, content: pdfBuffer }]
+  } catch (pdfErr) {
+    console.error('Invoice PDF for email failed:', pdfErr)
+  }
+
   const transport = getTransport()
   await transport.sendMail({
     from: `"${appName}" <${from}>`,
     to,
     subject: `Your ${appName} order ${orderNumber}`,
     html,
-    text: `Order ${orderNumber}. Total: ৳${Number(orderTotal || 0).toLocaleString('en-BD')}. View details in your account.`,
+    text: `Order ${orderNumber}. Total: ৳${Number(orderTotal || 0).toLocaleString('en-BD')}. Invoice PDF attached.`,
+    attachments,
   })
 }
 

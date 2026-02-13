@@ -8,7 +8,7 @@ export default function CartPage() {
   return (
     <>
         {/* Main Content */}
-        <main className="max-w-[1500px] mx-auto w-full p-4">
+        <main className="flex-1 max-w-[1500px] mx-auto w-full p-4">
             <div className="flex flex-col lg:flex-row gap-4">
                 {/* Cart Items */}
                 <div className="flex-1">
