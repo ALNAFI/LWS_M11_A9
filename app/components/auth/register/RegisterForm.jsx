@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Info } from 'lucide-react'
+import { Info, Eye, EyeOff } from 'lucide-react'
 import { registerData } from '@/app/data'
 import ContinueWithGoogle from '@/app/components/auth/ContinueWithGoogle'
 
@@ -17,6 +17,7 @@ export default function RegisterForm() {
   const [accountType, setAccountType] = useState('customer')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { form, disclaimer, signIn, shopOwnerInfo } = registerData
   const isShopOwner = accountType === 'shopOwner'
 
@@ -146,14 +147,39 @@ export default function RegisterForm() {
               >
                 {field.label}
               </label>
-              <input
-                type={field.type}
-                id={field.id}
-                name={field.id}
-                required={field.showForShopOwner ? isShopOwner : field.required}
-                placeholder={field.placeholder}
-                className={inputClassName}
-              />
+              {field.type === 'password' ? (
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id={field.id}
+                    name={field.id}
+                    required={field.showForShopOwner ? isShopOwner : field.required}
+                    placeholder={field.placeholder}
+                    className={`${inputClassName} pr-10`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((p) => !p)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <input
+                  type={field.type}
+                  id={field.id}
+                  name={field.id}
+                  required={field.showForShopOwner ? isShopOwner : field.required}
+                  placeholder={field.placeholder}
+                  className={inputClassName}
+                />
+              )}
               {field.hint && (
                 <p className="text-xs text-gray-600 mt-1 flex items-center gap-1">
                   <Info className="w-3 h-3 inline" />

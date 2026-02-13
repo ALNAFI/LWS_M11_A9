@@ -49,7 +49,7 @@ export default function BookingsPage() {
 
   return (
     <>
-      <main className="max-w-[1000px] mx-auto w-full p-4 py-6">
+      <main className="flex-1 max-w-[1000px] mx-auto w-full p-4 py-6">
         <NavResults />
         <BookingsPageHeader ordersCount={orders.length} />
 
