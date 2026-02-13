@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ['pdfkit', 'fontkit', 'iconv-lite'],
+  },
+};
 
 export default nextConfig;

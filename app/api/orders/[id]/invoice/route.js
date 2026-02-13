@@ -18,7 +18,10 @@ async function getCurrentUser(request) {
 }
 
 function formatPrice(n) {
-  return `৳${Number(n).toLocaleString('en-BD')}`
+  const num = Number(n) || 0
+  // ASCII-only digits & separators to avoid PDF font/encoding issues
+  const formatted = num.toLocaleString('en-US')
+  return `BDT ${formatted}`
 }
 
 function formatDate(d) {
