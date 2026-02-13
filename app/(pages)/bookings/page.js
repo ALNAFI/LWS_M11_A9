@@ -1,22 +1,76 @@
-import { Navbar, Footer } from '@/app/components/common'
-import React from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
+import { Footer } from '@/app/components/common'
 import NavResults from '@/app/components/bookings/NavResults'
 import BookingsPageHeader from '@/app/components/bookings/BookingsPageHeader'
 import OrderCard from '@/app/components/bookings/OrderCard'
-import { bookingsOrdersData } from '@/app/data'
 
 export default function BookingsPage() {
+  const [orders, setOrders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    async function load() {
+      try {
+        setLoading(true)
+        setError(null)
+        const res = await fetch('/api/orders', { credentials: 'include' })
+        if (!res.ok) {
+          if (res.status === 401) {
+            setError('Please sign in to view your orders.')
+          } else {
+            setError('Failed to load orders. Please try again.')
+          }
+          setOrders([])
+          return
+        }
+        const data = await res.json().catch(() => ({}))
+        if (!cancelled) {
+          setOrders(Array.isArray(data.orders) ? data.orders : [])
+        }
+      } catch (_) {
+        if (!cancelled) {
+          setError('Failed to load orders. Please try again.')
+          setOrders([])
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+    load()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <>
-     
-
       <main className="max-w-[1000px] mx-auto w-full p-4 py-6">
         <NavResults />
-        <BookingsPageHeader />
+        <BookingsPageHeader ordersCount={orders.length} />
 
-        <div className="space-y-6">
-          {bookingsOrdersData.map((order) => (
-            <OrderCard key={order.id} order={order} />
+        {loading && (
+          <p className="text-sm text-gray-500 mt-4">Loading your orders...</p>
+        )}
+        {!loading && error && (
+          <p className="text-sm text-red-600 mt-4">{error}</p>
+        )}
+        {!loading && !error && orders.length === 0 && (
+          <p className="text-sm text-gray-500 mt-4">
+            You have no orders yet.
+          </p>
+        )}
+
+        <div className="space-y-6 mt-4">
+          {orders.map((order) => (
+            <OrderCard
+              key={order.orderId || order.id}
+              order={order}
+              isShopView={order.isShopView}
+            />
           ))}
         </div>
       </main>

@@ -86,9 +86,13 @@ export default function PaymentProcessPage() {
     return null
   }
 
-  const itemsSubtotal = checkoutItems.reduce((s, i) => s + (i.price || 0) * (i.quantity || 1), 0)
+  const itemsSubtotal = checkoutItems.reduce(
+    (s, i) => s + (i.price || 0) * (i.quantity || 1),
+    0
+  )
   const serviceFee = 500
-  const deliveryFee = 0
+  // Free delivery on orders >= 50,000; otherwise 120 tk delivery charge
+  const deliveryFee = itemsSubtotal >= 50000 ? 0 : 120
   const orderTotal = itemsSubtotal + deliveryFee + serviceFee
 
   return (
