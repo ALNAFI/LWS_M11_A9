@@ -38,7 +38,7 @@ export default function ResultsHeader({ searchTerm = '', totalResults = 0 }) {
       <div className="text-sm">
         <span>{resultsText}</span>
         {searchTerm && (
-          <span className="font-bold text-amazon-orange">"{searchTerm}"</span>
+          <span className="font-bold text-amazon-orange">&quot;{searchTerm}&quot;</span>
         )}
       </div>
 
