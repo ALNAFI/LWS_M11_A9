@@ -37,7 +37,7 @@ export {
   paymentMethodData,
   paymentOrderSummaryData,
   paymentProductsListData,
-  addressSummaryData,
+  
 } from "./paymentProcessData";
 export { successOrderInfoData, orderPlacedData } from "./successData";
 export { bookingsPageData, bookingsOrdersData } from "./bookingsData";

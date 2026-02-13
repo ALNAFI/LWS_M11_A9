@@ -1,12 +1,83 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { paymentMethodData } from '@/app/data'
 
+const PAYMENT_METHOD_STORAGE_KEY = 'gadgetsbd_payment_method'
+
 export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceOrder }) {
+  const [card, setCard] = useState({
+    name: '',
+    number: '',
+    cvv: '',
+  })
+  const [errors, setErrors] = useState({})
+
+  // Load last-used (non-sensitive) payment info, e.g. cardholder name
+  useEffect(() => {
+    try {
+      const raw = typeof window !== 'undefined'
+        ? sessionStorage.getItem(PAYMENT_METHOD_STORAGE_KEY)
+        : null
+      if (!raw) return
+      const saved = JSON.parse(raw)
+      if (saved && typeof saved === 'object') {
+        setCard((prev) => ({
+          ...prev,
+          name: saved.name ?? prev.name,
+        }))
+      }
+    } catch {
+      // ignore corrupt storage
+    }
+  }, [])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!onPlaceOrder || checkoutItems.length === 0) return
+
+    const nextErrors = {}
+    const name = card.name.trim()
+    const numberRaw = card.number.replace(/\s|-/g, '')
+    const cvv = card.cvv.trim()
+
+    if (!name) {
+      nextErrors.name = 'Name on card is required.'
+    } else if (!/^[A-Za-z\s]+$/.test(name)) {
+      nextErrors.name = 'Name on card should contain only letters and spaces.'
+    }
+
+    if (!numberRaw) {
+      nextErrors.number = 'Card number is required.'
+    } else if (!/^[0-9]+$/.test(numberRaw)) {
+      nextErrors.number = 'Card number must contain only digits.'
+    } else if (numberRaw.length !== 16) {
+      nextErrors.number = 'Card number must be 16 digits.'
+    }
+
+    if (!cvv) {
+      nextErrors.cvv = 'CVV is required.'
+    } else if (!/^[0-9]+$/.test(cvv)) {
+      nextErrors.cvv = 'CVV must contain only digits.'
+    } else if (cvv.length !== 3) {
+      nextErrors.cvv = 'CVV must be 3 digits.'
+    }
+
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) return
+
+    // Persist non-sensitive choice so it's pre-filled next time
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(
+          PAYMENT_METHOD_STORAGE_KEY,
+          JSON.stringify({ name: card.name.trim() })
+        )
+      }
+    } catch {
+      // ignore storage errors
+    }
+
     await onPlaceOrder()
   }
 
@@ -62,8 +133,13 @@ export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceO
               <input
                 type="text"
                 placeholder="John Doe"
-                className="w-full max-w-sm px-2 py-1 border border-gray-400 rounded-sm text-sm outline-none focus:ring-1 focus:ring-amazon-blue"
+                value={card.name}
+                onChange={(e) => setCard((c) => ({ ...c, name: e.target.value }))}
+                className={`w-full max-w-sm px-2 py-1 border rounded-sm text-sm outline-none focus:ring-1 focus:ring-amazon-blue ${
+                  errors.name ? 'border-red-500' : 'border-gray-400'
+                }`}
               />
+              {errors.name && <p className="text-xs text-red-600 mt-1">{errors.name}</p>}
             </div>
 
             <div className="flex flex-wrap gap-4">
@@ -73,9 +149,19 @@ export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceO
                 </label>
                 <input
                   type="text"
-                  placeholder="#### #### #### ####"
-                  className="w-full px-2 py-1 border border-gray-400 rounded-sm text-sm outline-none focus:ring-1 focus:ring-amazon-blue"
+                  inputMode="numeric"
+                  placeholder="0000 0000 0000 0000"
+                  maxLength={19} // 16 digits + 3 spaces
+                  value={card.number.replace(/(\d{4})(?=\d)/g, '$1 ')}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, '').slice(0, 16)
+                    setCard((c) => ({ ...c, number: digits }))
+                  }}
+                  className={`w-full px-2 py-1 border rounded-sm text-sm outline-none focus:ring-1 focus:ring-amazon-blue ${
+                    errors.number ? 'border-red-500' : 'border-gray-400'
+                  }`}
                 />
+                {errors.number && <p className="text-xs text-red-600 mt-1">{errors.number}</p>}
               </div>
 
               <div className="w-24">
@@ -83,10 +169,20 @@ export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceO
                   CVV
                 </label>
                 <input
-                  type="password"
-                  placeholder="***"
-                  className="w-full px-2 py-1 border border-gray-400 rounded-sm text-sm outline-none focus:ring-1 focus:ring-amazon-blue"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="123"
+                  maxLength={3}
+                  value={card.cvv}
+                  onChange={(e) => {
+                    const v = e.target.value.replace(/\D/g, '').slice(0, 3)
+                    setCard((c) => ({ ...c, cvv: v }))
+                  }}
+                  className={`w-full px-2 py-1 border rounded-sm text-sm outline-none focus:ring-1 focus:ring-amazon-blue ${
+                    errors.cvv ? 'border-red-500' : 'border-gray-400'
+                  }`}
                 />
+                {errors.cvv && <p className="text-xs text-red-600 mt-1">{errors.cvv}</p>}
               </div>
             </div>
 

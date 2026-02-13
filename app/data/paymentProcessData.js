@@ -1,18 +1,4 @@
-export const addressSummaryData = {
-    step: '1',
-    title: 'Shipping address',
-    address: {
-      name: 'John Doe',
-      street: '123 Main St, Apartment 4B',
-      city: 'Dhaka, 1212',
-      country: 'Bangladesh',
-      phone: '+880 1712-345678',
-    },
-    changeLink: {
-      href: '#',
-      label: 'Change',
-    },
-  }
+
   
 export const paymentProductsListData = {
   sectionNumber: '2',

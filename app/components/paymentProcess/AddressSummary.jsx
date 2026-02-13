@@ -5,6 +5,7 @@ import React from 'react'
 export default function AddressSummary({ address, onEditOrderDetails }) {
   const a = address || {}
   const lines = [a.name, a.street, a.city, a.country].filter(Boolean)
+  const hasAddress = lines.length > 0
   return (
     <div className="border-b border-gray-300 pb-6">
       <div className="flex justify-between items-start">
@@ -18,7 +19,7 @@ export default function AddressSummary({ address, onEditOrderDetails }) {
             onClick={onEditOrderDetails}
             className="text-amazon-blue text-xs hover:underline hover:text-amazon-orange"
           >
-            Edit Order Details
+            {hasAddress ? 'Edit Address' : 'Add Address'}
           </button>
         )}
       </div>

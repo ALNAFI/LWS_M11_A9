@@ -73,7 +73,7 @@ export default function ShopCard({ shop }) {
             href={href}
             className="bg-amazon-yellow hover:bg-amazon-yellow_hover px-4 py-1.5 rounded-full text-xs font-bold shadow-sm transition-colors"
           >
-            Visit Shop
+            Visit Shop →
           </Link>
         </div>
       </div>

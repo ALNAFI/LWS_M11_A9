@@ -13,19 +13,17 @@ import { useCart } from '@/app/context/CartContext'
 
 const CHECKOUT_STORAGE_KEY = 'gadgetsbd_checkout_items'
 const CHECKOUT_ADDRESS_KEY = 'gadgetsbd_checkout_address'
-const DEFAULT_ADDRESS = {
-  name: 'John Doe',
-  street: '123 Main St, Apartment 4B',
-  city: 'Dhaka, 1212',
-  country: 'Bangladesh',
-  phone: '+880 1712-345678',
-}
-
 export default function PaymentProcessPage() {
   const router = useRouter()
   const { setItems } = useCart()
   const [checkoutItems, setCheckoutItems] = useState(null)
-  const [address, setAddress] = useState(DEFAULT_ADDRESS)
+  const [address, setAddress] = useState({
+    name: '',
+    street: '',
+    city: '',
+    country: '',
+    phone: '',
+  })
   const [placing, setPlacing] = useState(false)
   const [orderError, setOrderError] = useState(null)
   const [editModalOpen, setEditModalOpen] = useState(false)
@@ -42,7 +40,15 @@ export default function PaymentProcessPage() {
       const addrRaw = sessionStorage.getItem(CHECKOUT_ADDRESS_KEY)
       if (addrRaw) {
         const addr = JSON.parse(addrRaw)
-        if (addr && typeof addr === 'object') setAddress({ ...DEFAULT_ADDRESS, ...addr })
+        if (addr && typeof addr === 'object') {
+          setAddress({
+            name: addr.name ?? '',
+            street: addr.street ?? '',
+            city: addr.city ?? '',
+            country: addr.country ?? '',
+            phone: addr.phone ?? '',
+          })
+        }
       }
     } catch {
       setCheckoutItems([])
@@ -101,6 +107,18 @@ export default function PaymentProcessPage() {
             checkoutItems={checkoutItems}
             orderError={orderError}
             onPlaceOrder={async () => {
+              const hasAddress =
+                address.name.trim() &&
+                address.street.trim() &&
+                address.city.trim() &&
+                address.country.trim() &&
+                address.phone.trim()
+
+              if (!hasAddress) {
+                setOrderError('Please add your delivery address before placing your order.')
+                return
+              }
+
               setOrderError(null)
               setPlacing(true)
               try {
@@ -119,8 +137,8 @@ export default function PaymentProcessPage() {
                 const data = await res.json().catch(() => ({}))
                 if (!res.ok) throw new Error(data.error || 'Failed to place order')
                 try {
+                  // Clear only checkout items for this order; keep address for reuse
                   sessionStorage.removeItem(CHECKOUT_STORAGE_KEY)
-                  sessionStorage.removeItem(CHECKOUT_ADDRESS_KEY)
                   // Clear purchased items from client cart immediately
                   setItems((prev) =>
                     prev.filter(
