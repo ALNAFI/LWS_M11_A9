@@ -49,6 +49,12 @@ export default function BuyBox({ product, shop }) {
   }
 
   const handleBuyNow = () => {
+    const isLoggedIn = !!session?.user
+    if (!isLoggedIn) {
+      const redirectUrl = `/details?productId=${product.id}`
+      router.push(`/auth/login?redirect=${encodeURIComponent(redirectUrl)}`)
+      return
+    }
     if (stock < 1) return
     const qty = Math.min(quantity, stock)
     const item = checkoutItemFromProduct(product, qty, shop)
