@@ -32,7 +32,7 @@ export default function SuccessPageClient() {
 
   return (
     <>
-      <main className="max-w-[800px] mx-auto w-full p-8 py-12">
+      <main className="flex-1 max-w-[800px] mx-auto w-full p-8 py-12">
         {loading && <p className="text-gray-500">Loading order...</p>}
         {error && <p className="text-red-600">{error}</p>}
         {!loading && !error && order && (
