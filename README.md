@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Gadgets BD
 
-## Getting Started
+A full-stack e-commerce marketplace for buying and selling premium tech products. Built with Next.js 14 (App Router), MongoDB, and NextAuth. Supports customer shopping, shop-owner seller central, orders, reviews, and invoice emails with PDF attachment.
 
-First, run the development server:
+---
+
+## Features
+
+### For customers
+- **Browse** – Home, product listing with filters (category, brand, price, etc.), product details
+- **Shops** – List shops, shop detail page with products
+- **Cart** – Add/remove items, persist cart (DB when logged in, in-memory for guests)
+- **Checkout** – Address & payment flow, delivery fee (free over ৳50,000), service fee
+- **Orders** – My orders (bookings), order details, cancel order, download invoice PDF
+- **Reviews** – One review per user per product; edit/delete own review; only purchasers can review
+- **Auth** – Email/password login and register, Google sign-in, forgot/reset password
+
+### For shop owners
+- **Profile** – Shop profile (name, location, banner, description, specialization)
+- **Add/Edit products** – Create and edit products with image upload (ImageKit)
+- **Manage inventory** – Product list, publish/unpublish, delete, search/filter
+- **Orders** – Shop view of orders containing their products; update item status (Pending → Confirmed → Shipped → Delivered)
+
+### General
+- **Invoice** – PDF invoice per order; sent by email on order placement (with PDF attached)
+- **Role-based UI** – Nav and pages adapt for customer vs shop owner
+- **Responsive UI** – Tailwind CSS, Next.js `Image` for optimized images
+
+---
+
+## Tech stack
+
+| Layer        | Technology                          |
+|-------------|--------------------------------------|
+| Framework   | Next.js 14 (App Router)              |
+| UI          | React 18, Tailwind CSS, Lucide React |
+| Auth        | NextAuth (credentials + Google)     |
+| Database    | MongoDB (Mongoose)                   |
+| Email       | Nodemailer (Gmail/SMTP)              |
+| PDF         | PDFKit (invoices)                   |
+| Images      | Next/Image, ImageKit (upload)        |
+
+---
+
+## Project structure
+
+```
+app/
+├── (pages)/              # Route group: main app pages
+│   ├── page.js           # Home
+│   ├── products/         # Product listing
+│   ├── details/          # Product detail (?productId=)
+│   ├── cart/
+│   ├── paymentProcess/    # Checkout
+│   ├── success/          # Order confirmation
+│   ├── bookings/         # My orders
+│   ├── shop/             # Shops list, shop/[id], shop/orders
+│   ├── create/           # Add product, create/edit/[id]
+│   ├── manageList/       # Manage products (shop owner)
+│   ├── profile/          # Shop profile (shop owner)
+│   ├── review/           # Review page (also modal from details)
+│   └── auth/             # login, register, forgetPassword, reset-password
+├── api/
+│   ├── auth/             # login, register, logout, me, forgot-password, reset-password
+│   ├── cart/             # GET, PUT (sync cart)
+│   ├── orders/           # GET list, POST create, [id] GET, cancel, invoice, item-status, reorder
+│   ├── orders/has-purchased/
+│   ├── products/         # GET list, POST create, [id] GET/PATCH/DELETE
+│   ├── reviews/          # GET list, POST create, [id] PATCH/DELETE
+│   ├── shops/            # GET list, [id] GET
+│   ├── profile/          # PATCH
+│   └── upload/image/     # POST (ImageKit)
+├── components/           # React components (auth, cart, details, paymentProcess, etc.)
+├── context/              # CartContext
+├── lib/                  # auth, email, tokens, invoicePdf
+├── models/                # User, Product, Order, Cart, Review, RefreshToken, PasswordResetToken
+├── dbConnect/             # connectMongo
+└── config/                # metadata
+```
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- MongoDB (local or Atlas)
+- Gmail/Google OAuth credentials (for login and email)
+
+### Installation
+
+```bash
+git clone <repo-url>
+cd lwsm11a9
+npm install
+```
+
+### Environment variables
+
+Create a `.env` file in the project root:
+
+| Variable | Description |
+|----------|-------------|
+| `MONGO_URI` | MongoDB connection string |
+| `NEXTAUTH_SECRET` | Secret for NextAuth (e.g. `openssl rand -base64 32`) |
+| `NEXTAUTH_URL` | App URL (e.g. `http://localhost:3000` or production URL) |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| `GMAIL_USER` | Gmail address for sending emails |
+| `GMAIL_PASS` | Gmail app password (or use `SMTP_*` for other SMTP) |
+| `IMAGEKIT_PUBLIC_KEY` | ImageKit public key (for image upload) |
+| `IMAGEKIT_PRIVATE_KEY` | ImageKit private key |
+| `IMAGEKIT_URL_ENDPOINT` | ImageKit URL endpoint |
+
+Optional: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `APP_URL`, `JWT_SECRET`.
+
+### Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Build for production
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm start` | Start production server |
+| `npm run lint` | Run ESLint |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Private. Part of Learn With Sumit assignment (LWS M11 A9).
