@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
@@ -48,12 +49,14 @@ export default function FeaturedProduct() {
           return (
           <div key={product.id} className="flex-none w-48">
             <Link href={`/details?productId=${product.id}`}>
-              <div className="bg-gray-50 h-48 flex items-center justify-center mb-2 p-2">
+              <div className="relative bg-gray-50 h-48 flex items-center justify-center mb-2 p-2 overflow-hidden">
                 {product.mainImageUrl ? (
-                  <img
+                  <Image
                     src={product.mainImageUrl}
                     alt={product.productName}
-                    className="h-full w-full object-cover mix-blend-multiply"
+                    fill
+                    sizes="192px"
+                    className="object-cover mix-blend-multiply"
                   />
                 ) : (
                   <span className="text-gray-400 text-sm">No image</span>

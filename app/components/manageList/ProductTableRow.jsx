@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { Pencil, Eye, EyeOff, Trash2 } from 'lucide-react'
 import { manageListPageData } from '@/app/data'
 
@@ -44,11 +45,15 @@ export default function ProductTableRow({ product, onEdit, onPublishToggle, onDe
         </span>
       </td>
       <td className="p-3">
-        <img
-          src={imageUrl}
-          alt={product.productName}
-          className="w-12 h-12 object-cover rounded border border-gray-200"
-        />
+        <div className="relative w-12 h-12 rounded border border-gray-200 overflow-hidden">
+          <Image
+            src={imageUrl}
+            alt={product.productName}
+            fill
+            sizes="48px"
+            className="object-cover"
+          />
+        </div>
       </td>
       <td className="p-3">
         <div className="font-medium">{product.productName}</div>

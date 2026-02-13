@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { paymentMethodData } from '@/app/data'
 
 const PAYMENT_METHOD_STORAGE_KEY = 'gadgetsbd_payment_method'
@@ -113,10 +114,12 @@ export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceO
                 </span>
                 <div className="flex gap-2 mt-2">
                   {method.logos.map((logo) => (
-                    <img
+                    <Image
                       key={logo.alt}
                       src={logo.src}
-                      className="h-4"
+                      width={48}
+                      height={16}
+                      className="h-4 w-auto"
                       alt={logo.alt}
                     />
                   ))}

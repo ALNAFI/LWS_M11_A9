@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useCart } from '@/app/context/CartContext'
 
 export default function CartItemsList() {
@@ -40,11 +41,13 @@ export default function CartItemsList() {
             onChange={(e) => setItemSelected(item.id, e.target.checked)}
             className="mt-4 rounded border-gray-400"
           />
-          <div className="w-32 h-32 flex-shrink-0">
-            <img
+          <div className="relative w-32 h-32 flex-shrink-0 rounded border border-gray-200 overflow-hidden">
+            <Image
               src={item.image}
-              className="w-full h-full object-cover rounded border border-gray-200"
               alt="Product"
+              fill
+              sizes="128px"
+              className="object-cover"
             />
           </div>
 

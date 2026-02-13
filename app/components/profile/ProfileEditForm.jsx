@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { profilePageData } from '@/app/data'
 import ImageUpload from '@/app/components/common/ImageUpload'
 
@@ -161,8 +162,8 @@ export default function ProfileEditForm({ user, onCancel, onSave }) {
           {user?.shopBannerImage && (
             <div>
               <label className="block text-sm font-bold mb-2">Current Banner</label>
-              <div className="h-48 overflow-hidden rounded-md border border-gray-300">
-                <img src={user.shopBannerImage} className="w-full h-full object-cover" alt="Banner" />
+              <div className="relative h-48 overflow-hidden rounded-md border border-gray-300">
+                <Image src={user.shopBannerImage} fill sizes="400px" className="object-cover" alt="Banner" />
               </div>
             </div>
           )}

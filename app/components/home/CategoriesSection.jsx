@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { categoriesData } from '@/app/data'
 
 export default function CategoriesSection() {
@@ -14,11 +15,13 @@ export default function CategoriesSection() {
             href={category.category ? `${category.href}?category=${encodeURIComponent(category.category)}` : category.href}
             className="bg-white p-4 text-center hover:shadow-md transition-shadow border border-gray-200 rounded"
           >
-            <div className="h-32 flex items-center justify-center mb-2">
-              <img
+            <div className="relative h-32 flex items-center justify-center mb-2 overflow-hidden">
+              <Image
                 src={category.image}
-                className="h-full object-cover"
                 alt={category.alt}
+                fill
+                sizes="(max-width: 768px) 50vw, 16vw"
+                className="object-cover"
               />
             </div>
             <h3 className="font-medium text-sm">{category.title}</h3>

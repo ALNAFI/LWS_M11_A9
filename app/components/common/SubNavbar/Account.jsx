@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { ChevronDown } from 'lucide-react'
@@ -97,9 +98,9 @@ export default function Account() {
         aria-expanded={menuOpen}
         aria-haspopup="true"
       >
-        <span className="h-8 w-8 rounded-full border-2 border-white overflow-hidden bg-gray-400 flex-shrink-0">
+        <span className="relative h-8 w-8 rounded-full border-2 border-white overflow-hidden bg-gray-400 flex-shrink-0 block">
           {profileImage ? (
-            <img src={profileImage} alt="" className="h-full w-full object-cover" />
+            <Image src={profileImage} alt="" fill sizes="32px" className="object-cover" />
           ) : (
             <span className="h-full w-full flex items-center justify-center text-white text-xs font-bold">
               {displayName ? displayName.charAt(0).toUpperCase() : '?'}

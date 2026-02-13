@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { paymentProductsListData } from '@/app/data'
 
 export default function ProductsList({ products: productsProp }) {
@@ -36,11 +37,13 @@ export default function ProductsList({ products: productsProp }) {
               key={product.id}
               className="flex gap-4 pb-4 border-b border-gray-200 last:border-0"
             >
-              <div className="w-24 h-24 bg-gray-50 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                <img
+              <div className="relative w-24 h-24 bg-gray-50 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                <Image
                   src={product.image}
                   alt={product.title}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="96px"
+                  className="object-cover"
                 />
               </div>
               <div className="flex-1">

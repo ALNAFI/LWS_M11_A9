@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Star, StarHalf } from 'lucide-react'
 
 function StarRating({ rating }) {
@@ -36,12 +37,14 @@ export default function ShopCard({ shop }) {
   return (
     <div className="bg-white border border-gray-200 rounded-sm overflow-hidden flex flex-col hover:shadow-md transition-shadow">
       <div
-        className={`h-48 overflow-hidden bg-gradient-to-br ${imageGradient}`}
+        className={`relative h-48 overflow-hidden bg-gradient-to-br ${imageGradient}`}
       >
-        <img
+        <Image
           src={image}
-          className="w-full h-full object-cover"
           alt={name}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className="object-cover"
         />
       </div>
       <div className="p-4 flex-1 flex flex-col">

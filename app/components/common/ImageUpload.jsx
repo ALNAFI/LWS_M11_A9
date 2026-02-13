@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef, useState } from 'react'
+import Image from 'next/image'
 
 const inputClassName =
   'w-full px-3 py-2 border border-gray-400 rounded-md outline-none focus:ring-1 focus:ring-amazon-blue focus:border-amazon-blue'
@@ -76,8 +77,8 @@ export default function ImageUpload({ name, value, defaultValue, onChange, accep
       {uploadError && <p className="text-xs text-red-600 mt-1">{uploadError}</p>}
       {hint && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
       {currentUrl && (
-        <div className="mt-2 h-24 w-24 rounded border border-gray-300 overflow-hidden bg-gray-100">
-          <img src={currentUrl} alt="Preview" className="w-full h-full object-cover" />
+        <div className="relative mt-2 h-24 w-24 rounded border border-gray-300 overflow-hidden bg-gray-100">
+          <Image src={currentUrl} alt="Preview" fill sizes="96px" className="object-cover" />
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { brandData } from '@/app/data'
 
 function BrandCard({ brand }) {
@@ -9,13 +10,15 @@ function BrandCard({ brand }) {
   return (
     <Link
       href={href}
-      className="flex-none w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 bg-gray-50 border border-gray-200 rounded flex items-center justify-center hover:shadow-md transition-shadow cursor-pointer overflow-hidden p-3"
+      className="relative flex-none w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 bg-gray-50 border border-gray-200 rounded flex items-center justify-center hover:shadow-md transition-shadow cursor-pointer overflow-hidden p-3"
     >
       {brand.logo && (
-        <img
+        <Image
           src={brand.logo}
           alt={brand.name}
-          className="w-full h-full object-contain"
+          fill
+          sizes="160px"
+          className="object-contain p-2"
         />
       )}
     </Link>

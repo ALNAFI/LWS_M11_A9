@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { successOrderInfoData } from '@/app/data'
 
 export default function SuccessOrderInfo({ order }) {
@@ -28,11 +29,15 @@ export default function SuccessOrderInfo({ order }) {
           className={`flex gap-4 items-start ${index > 0 ? 'pt-4 border-t border-gray-100' : ''}`}
         >
           {item.image && (
-            <img
-              src={item.image}
-              className="w-20 h-20 object-cover border border-gray-200 rounded"
-              alt={item.productName || item.title}
-            />
+            <div className="relative w-20 h-20 flex-shrink-0 border border-gray-200 rounded overflow-hidden">
+              <Image
+                src={item.image}
+                alt={item.productName || item.title}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </div>
           )}
           <div>
             <Link

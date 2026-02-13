@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
@@ -59,12 +60,14 @@ export default function RelatedProducts({ product }) {
             className="border border-gray-200 rounded p-3 hover:shadow-md transition"
           >
             <Link href={`/details?productId=${p.id}`} className="block">
-              <div className="bg-gray-50 h-32 flex items-center justify-center mb-2 overflow-hidden">
+              <div className="relative bg-gray-50 h-32 flex items-center justify-center mb-2 overflow-hidden">
                 {p.mainImageUrl ? (
-                  <img
+                  <Image
                     src={p.mainImageUrl}
                     alt={p.productName}
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="128px"
+                    className="object-cover"
                   />
                 ) : (
                   <span className="text-gray-400 text-xs">No image</span>

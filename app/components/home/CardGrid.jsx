@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { cardGridData } from '@/app/data'
 
@@ -44,11 +45,13 @@ export default function CardGrid() {
               <h2 className="text-xl font-bold">{card.title}</h2>
               <div className="grid grid-cols-2 gap-2 h-full">
                 {card.images.map((img) => (
-                  <div key={img} className="overflow-hidden">
-                    <img
+                  <div key={img} className="relative overflow-hidden min-h-[80px]">
+                    <Image
                       src={img}
-                      className="w-full h-full object-cover mb-1 transition-transform duration-300 ease-out group-hover:scale-110"
                       alt=""
+                      fill
+                      sizes="150px"
+                      className="object-cover mb-1 transition-transform duration-300 ease-out group-hover:scale-110"
                     />
                   </div>
                 ))}
@@ -70,11 +73,13 @@ export default function CardGrid() {
               className="group bg-white p-4 flex flex-col gap-4 shadow-sm z-20 hover:shadow-md transition-shadow"
             >
               <h2 className="text-xl font-bold">{card.title}</h2>
-              <div className="w-full h-full bg-gray-100 flex items-center justify-center overflow-hidden">
-                <img
+              <div className="relative w-full h-full min-h-[120px] bg-gray-100 flex items-center justify-center overflow-hidden">
+                <Image
                   src={card.image}
-                  className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-110"
                   alt=""
+                  fill
+                  sizes="200px"
+                  className="object-cover transition-transform duration-300 ease-out group-hover:scale-110"
                 />
               </div>
               <span className="text-amazon-blue text-sm hover:underline hover:text-red-700 mt-auto">
@@ -98,8 +103,8 @@ export default function CardGrid() {
                   {card.buttonText}
                 </span>
               </div>
-              <div className="mt-4 grow h-full overflow-hidden">
-                <img src={card.image} alt="" className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-110" />
+              <div className="relative mt-4 grow h-full min-h-[100px] overflow-hidden">
+                <Image src={card.image} alt="" fill sizes="200px" className="object-cover transition-transform duration-300 ease-out group-hover:scale-110" />
               </div>
             </Link>
           )

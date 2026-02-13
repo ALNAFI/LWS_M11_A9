@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { TruckIcon, ShieldCheckIcon } from 'lucide-react'
 import { paymentOrderSummaryData } from '@/app/data'
 import Link from 'next/link'
@@ -79,8 +80,8 @@ export default function OrderSummary({
           <div className="mb-4 space-y-2 max-h-40 overflow-y-auto">
             {checkoutItems.map((item) => (
               <div key={item.id} className="flex gap-2 text-xs text-gray-600">
-                <div className="w-10 h-10 flex-shrink-0 bg-gray-50 rounded overflow-hidden">
-                  {item.image ? <img src={item.image} alt="" className="w-full h-full object-cover" /> : null}
+                <div className="relative w-10 h-10 flex-shrink-0 bg-gray-50 rounded overflow-hidden">
+                  {item.image ? <Image src={item.image} alt="" fill sizes="40px" className="object-cover" /> : null}
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium text-gray-800">{item.title}</p>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useCart } from '@/app/context/CartContext'
@@ -59,13 +60,15 @@ export default function ProductGrid({ products = [], loading = false }) {
           >
             <Link
               href={`/details?productId=${product.id}`}
-              className="w-48 h-48 flex-shrink-0 bg-gray-50 flex items-center justify-center"
+              className="relative w-48 h-48 flex-shrink-0 bg-gray-50 flex items-center justify-center overflow-hidden"
             >
               {product.mainImageUrl ? (
-                <img
+                <Image
                   src={product.mainImageUrl}
                   alt={product.productName}
-                  className="h-full w-full object-cover mix-blend-multiply"
+                  fill
+                  sizes="192px"
+                  className="object-cover mix-blend-multiply"
                 />
               ) : (
                 <span className="text-gray-400 text-sm">No image</span>

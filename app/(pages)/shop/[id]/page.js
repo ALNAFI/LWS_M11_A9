@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import { Footer } from '@/app/components/common'
 
@@ -64,12 +65,14 @@ export default function ShopDetailPage() {
       <main className="max-w-[1200px] mx-auto w-full px-4 py-8">
         {/* Shop header */}
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-8">
-          <div className="h-48 sm:h-64 bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden">
+          <div className="relative h-48 sm:h-64 bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden">
             {shop.image ? (
-              <img
+              <Image
                 src={shop.image}
                 alt={shop.name}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                className="object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-lg">
@@ -110,12 +113,14 @@ export default function ShopDetailPage() {
                   href={`/details?productId=${p.id}`}
                   className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow flex flex-col"
                 >
-                  <div className="aspect-square bg-gray-100 overflow-hidden">
+                  <div className="relative aspect-square bg-gray-100 overflow-hidden">
                     {p.mainImageUrl ? (
-                      <img
+                      <Image
                         src={p.mainImageUrl}
                         alt={p.productName}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm p-4 text-center">

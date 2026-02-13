@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 
 export default function ImageGallery({ product }) {
   const images = [
@@ -25,13 +26,15 @@ export default function ImageGallery({ product }) {
                 activeIndex === index ? 'border-amazon-secondary' : 'border-gray-300'
               }`}
             >
-              <img src={src} alt="" className="w-full h-full object-cover" />
+              <span className="relative block w-10 h-10">
+                <Image src={src} alt="" fill sizes="40px" className="object-cover" />
+              </span>
             </button>
           ))}
       </div>
-      <div className="flex-1 border border-gray-200 rounded p-4 bg-gray-50">
+      <div className="relative flex-1 border border-gray-200 rounded p-4 bg-gray-50 aspect-square max-h-[400px]">
         {mainImage ? (
-          <img src={mainImage} alt={product.productName} className="w-full h-auto object-cover" />
+          <Image src={mainImage} alt={product.productName} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain" />
         ) : (
           <div className="w-full aspect-square bg-gray-200 flex items-center justify-center text-gray-400">
             No image

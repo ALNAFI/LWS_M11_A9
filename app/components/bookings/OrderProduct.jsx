@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { CheckCircle, Truck, Clock, XCircle } from 'lucide-react'
 import OrderProductActions from './OrderProductActions'
 
@@ -49,11 +50,15 @@ export default function OrderProduct({ product, isFirst, isShopView, onStatusUpd
     <div
       className={`flex gap-4 ${!isFirst ? 'pt-6 border-t border-gray-200' : ''}`}
     >
-      <img
-        src={image}
-        alt={title}
-        className="w-32 h-32 object-cover border border-gray-200 rounded"
-      />
+      <div className="relative w-32 h-32 flex-shrink-0 border border-gray-200 rounded overflow-hidden">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          sizes="128px"
+          className="object-cover"
+        />
+      </div>
       <div className="flex-1">
         <Link
           href={href}

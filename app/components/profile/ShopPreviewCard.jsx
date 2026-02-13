@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import { CheckCircle } from 'lucide-react'
 
 export default function ShopPreviewCard({ user }) {
@@ -23,12 +24,14 @@ export default function ShopPreviewCard({ user }) {
       </div>
       <div className="p-6">
         <div className="max-w-sm mx-auto bg-white border border-gray-200 rounded-sm overflow-hidden shadow-md">
-          <div className="h-48 overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100">
+          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100">
             {bannerImage ? (
-              <img
+              <Image
                 src={bannerImage}
-                className="w-full h-full object-cover"
                 alt="Shop Banner"
+                fill
+                sizes="384px"
+                className="object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
