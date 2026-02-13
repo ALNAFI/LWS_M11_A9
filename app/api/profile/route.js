@@ -11,7 +11,7 @@ async function getCurrentUserId(request) {
     const payload = await verifyAccessToken(accessToken)
     if (payload?.sub) return payload.sub
   }
-  const session = await getServerSession(request, authOptions)
+  const session = await getServerSession(authOptions)
   return session?.user?.id ?? null
 }
 

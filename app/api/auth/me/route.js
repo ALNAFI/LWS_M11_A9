@@ -40,7 +40,7 @@ export async function GET(request) {
       }
     }
 
-    const session = await getServerSession(request, authOptions)
+    const session = await getServerSession(authOptions)
     if (session?.user) {
       await connectMongo()
       const user = await User.findById(session.user.id).select(
@@ -78,9 +78,9 @@ export async function GET(request) {
       })
     }
 
-    return NextResponse.json({ user: null }, { status: 401 })
+    return NextResponse.json({ user: null })
   } catch (err) {
     console.error('Auth me error:', err)
-    return NextResponse.json({ user: null }, { status: 401 })
+    return NextResponse.json({ user: null })
   }
 }
