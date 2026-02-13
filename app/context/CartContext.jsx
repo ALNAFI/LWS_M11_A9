@@ -1,7 +1,7 @@
 'use client'
 
-import React, { createContext, useContext, useState, useCallback } from 'react'
-import { cartItemsData } from '@/app/data'
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react'
+import { useSession } from 'next-auth/react'
 
 function parsePrice(str) {
   if (typeof str === 'number') return str
@@ -10,26 +10,71 @@ function parsePrice(str) {
   return Number(num) || 0
 }
 
-function toCartItem(item, index) {
+function normalizeCartItem(item) {
+  const price = parsePrice(item.price)
   return {
-    id: item.id ?? index,
+    id: item.id,
     title: item.title,
-    image: item.image,
-    price: parsePrice(item.price),
-    priceDisplay: typeof item.price === 'string' ? item.price : `৳${Number(item.price).toLocaleString('en-BD')}`,
-    seller: item.seller,
-    href: item.href ?? '/details',
-    quantity: item.quantity ?? 1,
-    selected: true,
+    image: item.image || '',
+    price,
+    priceDisplay: typeof item.priceDisplay === 'string' ? item.priceDisplay : `৳${Number(price).toLocaleString('en-BD')}`,
+    seller: item.seller || '',
+    href: item.href || '/details',
+    quantity: Number(item.quantity) || 1,
+    selected: item.selected !== false,
   }
 }
-
-const defaultItems = (cartItemsData.items || []).map(toCartItem)
 
 const CartContext = createContext(null)
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState(defaultItems)
+  const { data: session, status } = useSession()
+  const [items, setItems] = useState([])
+  const hasLoadedRef = useRef(false)
+  const syncTimeoutRef = useRef(null)
+
+  const isCustomer = session?.user?.userType === 'customer'
+  const isLoggedInCustomer = !!(session?.user && isCustomer)
+
+  // Load cart from API when user is logged-in customer
+  useEffect(() => {
+    if (status === 'loading') return
+    if (!isLoggedInCustomer) {
+      setItems([])
+      hasLoadedRef.current = true
+      return
+    }
+    hasLoadedRef.current = false
+    fetch('/api/cart', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => {
+        const list = Array.isArray(data?.items) ? data.items : []
+        setItems(list.map(normalizeCartItem))
+        hasLoadedRef.current = true
+      })
+      .catch(() => {
+        setItems([])
+        hasLoadedRef.current = true
+      })
+  }, [status, isLoggedInCustomer])
+
+  // Sync cart to API when items change (logged-in customer only), debounced
+  useEffect(() => {
+    if (!hasLoadedRef.current || !isLoggedInCustomer || typeof window === 'undefined') return
+    if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current)
+    syncTimeoutRef.current = setTimeout(() => {
+      fetch('/api/cart', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ items }),
+      }).catch(() => {})
+      syncTimeoutRef.current = null
+    }, 400)
+    return () => {
+      if (syncTimeoutRef.current) clearTimeout(syncTimeoutRef.current)
+    }
+  }, [items, isLoggedInCustomer])
 
   const setItemSelected = useCallback((id, selected) => {
     setItems((prev) =>
