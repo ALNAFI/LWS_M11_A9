@@ -9,6 +9,7 @@ import { ChevronDown } from 'lucide-react'
 const MENU_SHOP_OWNER = [
   { label: 'Profile', href: '/profile' },
   { label: 'Add Product', href: '/create' },
+  { label: 'Orders', href: '/shop/orders' },
   { label: 'Manage Products', href: '/manageList' },
   { label: 'Logout', href: null, isLogout: true },
 ]

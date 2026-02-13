@@ -12,6 +12,7 @@ const ROUTE_METADATA = [
   { path: '/auth/login', title: 'Sign In', description: DEFAULT_DESCRIPTION },
   { path: '/create/edit', title: 'Edit Product', description: 'Gadgets BD Seller Central' },
   { path: '/create', title: 'Add Product', description: 'Gadgets BD Seller Central' },
+  { path: '/shop/orders', title: 'Orders', description: 'Gadgets BD Seller Central' },
   { path: '/manageList', title: 'Manage Inventory', description: 'Gadgets BD Seller Central' },
   { path: '/profile', title: 'Shop Profile', description: 'Gadgets BD Seller Central' },
   { path: '/paymentProcess', title: 'Checkout', description: DEFAULT_DESCRIPTION },
