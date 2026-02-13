@@ -9,6 +9,7 @@ import { signOut } from 'next-auth/react'
 const MENU_ITEMS = [
   { label: 'Home', href: '/' },
   { label: 'Add Product', href: '/create' },
+  { label: 'Orders', href: '/shop/orders' },
   { label: 'Manage Products', href: '/manageList' },
   { label: 'Logout', href: null, isLogout: true },
 ]
