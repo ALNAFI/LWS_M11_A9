@@ -119,7 +119,7 @@ export async function GET(request) {
           image: productImageMap[productIdStr] || 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200',
           title: i.productName || 'Item',
           href: `/details?productId=${productIdStr}`,
-          seller: 'Gadgets BD',
+          seller: 'Gadget Hub',
           quantity: i.quantity || 1,
           status: { ...display, value: status },
           isShopOwnerProduct: isMyProduct,

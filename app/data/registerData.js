@@ -57,10 +57,10 @@ export const registerData = {
         required: true,
       },
     ],
-    submitLabel: 'Create your Gadgets BD account',
+    submitLabel: 'Create your Gadget Hub account',
   },
   disclaimer: {
-    text: "By creating an account, you agree to Gadgets BD's",
+    text: "By creating an account, you agree to Gadget Hub's",
     links: [
       { label: 'Conditions of Use', href: '#' },
       { label: 'Privacy Notice', href: '#' },
@@ -75,6 +75,6 @@ export const registerData = {
   shopOwnerInfo: {
     title: 'Shop Owner Registration',
     description:
-      "After registration, you'll be able to set up your shop profile, add products, and start selling on Gadgets BD marketplace.",
+      "After registration, you'll be able to set up your shop profile, add products, and start selling on Gadget Hub marketplace.",
   },
 }

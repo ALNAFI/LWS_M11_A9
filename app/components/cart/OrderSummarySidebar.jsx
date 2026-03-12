@@ -11,7 +11,7 @@ import {
 import { orderSummaryData } from '@/app/data'
 import { useCart } from '@/app/context/CartContext'
 
-const CHECKOUT_STORAGE_KEY = 'gadgetsbd_checkout_items'
+const CHECKOUT_STORAGE_KEY = 'GadgetHub_checkout_items'
 
 const subtotalBoxIcon = {
   ShieldCheck: ShieldCheckIcon,

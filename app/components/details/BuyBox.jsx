@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import { ShieldCheckIcon, TruckIcon, PackageIcon } from 'lucide-react'
 import { useCart } from '@/app/context/CartContext'
 
-const CHECKOUT_STORAGE_KEY = 'gadgetsbd_checkout_items'
+const CHECKOUT_STORAGE_KEY = 'GadgetHub_checkout_items'
 
 function formatPrice(price) {
   if (typeof price === 'number') return `৳${price.toLocaleString('en-BD')}`
@@ -119,7 +119,7 @@ export default function BuyBox({ product, shop }) {
           </p>
           <p className="mb-1">
             <TruckIcon className="w-4 h-4 inline mr-1" />
-            Ships from Gadgets BD
+            Ships from Gadget Hub
           </p>
           <p>
             <PackageIcon className="w-4 h-4 inline mr-1" />

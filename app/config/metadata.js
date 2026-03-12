@@ -1,4 +1,4 @@
-const SITE_NAME = 'Gadgets BD'
+const SITE_NAME = 'Gadget Hub'
 const DEFAULT_DESCRIPTION = 'Buy and Sell Premium Tech Products'
 
 /**
@@ -6,15 +6,15 @@ const DEFAULT_DESCRIPTION = 'Buy and Sell Premium Tech Products'
  * Use pathname without query string for matching (e.g. /details not /details?productId=...).
  */
 const ROUTE_METADATA = [
-  { path: '/auth/reset-password', title: 'Reset Password', description: 'Set a new password for your Gadgets BD account.' },
+  { path: '/auth/reset-password', title: 'Reset Password', description: 'Set a new password for your Gadget Hub account.' },
   { path: '/auth/forgetPassword', title: 'Password Assistance', description: DEFAULT_DESCRIPTION },
   { path: '/auth/register', title: 'Create Account', description: DEFAULT_DESCRIPTION },
   { path: '/auth/login', title: 'Sign In', description: DEFAULT_DESCRIPTION },
-  { path: '/create/edit', title: 'Edit Product', description: 'Gadgets BD Seller Central' },
-  { path: '/create', title: 'Add Product', description: 'Gadgets BD Seller Central' },
-  { path: '/shop/orders', title: 'Orders', description: 'Gadgets BD Seller Central' },
-  { path: '/manageList', title: 'Manage Inventory', description: 'Gadgets BD Seller Central' },
-  { path: '/profile', title: 'Shop Profile', description: 'Gadgets BD Seller Central' },
+  { path: '/create/edit', title: 'Edit Product', description: 'Gadget Hub Seller Central' },
+  { path: '/create', title: 'Add Product', description: 'Gadget Hub Seller Central' },
+  { path: '/shop/orders', title: 'Orders', description: 'Gadget Hub Seller Central' },
+  { path: '/manageList', title: 'Manage Inventory', description: 'Gadget Hub Seller Central' },
+  { path: '/profile', title: 'Shop Profile', description: 'Gadget Hub Seller Central' },
   { path: '/paymentProcess', title: 'Checkout', description: DEFAULT_DESCRIPTION },
   { path: '/success', title: 'Order Placed', description: DEFAULT_DESCRIPTION },
   { path: '/review', title: 'Create Review', description: DEFAULT_DESCRIPTION },

@@ -17,7 +17,7 @@ export const orderSummaryData = {
   },
   footerItems: [
     { icon: 'ShieldCheck', text: 'Secure transaction' },
-    { icon: 'Truck', text: 'Ships from Gadgets BD' },
+    { icon: 'Truck', text: 'Ships from Gadget Hub' },
   ],
 }
 export const cartItemsData = {

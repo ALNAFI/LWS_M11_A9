@@ -35,7 +35,7 @@ export const paymentOrderSummaryData = {
   formId: 'paymentForm',
   submitButton: { label: 'Place your order' },
   disclaimer: {
-    text: "By placing your order, you agree to Gadgets BD's",
+    text: "By placing your order, you agree to Gadget Hub's",
     links: [
       { label: 'privacy notice', href: '#' },
       { label: 'conditions of use', href: '#' },
@@ -87,5 +87,5 @@ export const paymentProcessFooterData = {
     { label: 'Privacy Notice', href: '#' },
     { label: 'Help', href: '#' },
   ],
-  copyrightText: 'Gadgets BD - Premium Tech Marketplace. All rights reserved by LWS.',
+  copyrightText: 'Gadget Hub - Premium Tech Marketplace. All rights reserved by LWS.',
 }

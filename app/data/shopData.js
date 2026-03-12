@@ -2,7 +2,7 @@ export const shopPageData = {
   intro: {
     title: 'Featured Shops & Storefronts',
     subtitle:
-      'Discover trusted tech shops delivering premium gadgets across Bangladesh.',
+      'Discover trusted tech shops delivering premium Gadgets  across Bangladesh.',
   },
   shops: [
     {

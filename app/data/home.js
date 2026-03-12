@@ -95,7 +95,7 @@ export const whyUsData = [
       icon: 'truck',
       title: 'Fast Delivery',
       description:
-        'Get your gadgets delivered within 24-48 hours across Bangladesh',
+        'Get your Gadgets  delivered within 24-48 hours across Bangladesh',
     },
     {
       icon: 'shield-check',
@@ -168,7 +168,7 @@ export const categoriesData = [
     },
   ]
   
-// Brand logos live under /public/Images/*.png (note capital \"I\")
+
 export const brandData = [
   { name: 'Apple', logo: '/Images/apple.png' },
   { name: 'Samsung', logo: '/Images/samsung.png' },

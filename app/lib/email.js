@@ -20,8 +20,8 @@ function getTransport() {
 }
 
 export async function sendWelcomeEmail({ to, name }) {
-  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@gadgetsbd.com'
-  const appName = 'Gadgets BD'
+  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@GadgetHub.com'
+  const appName = 'Gadget Hub'
   const creatorName = name ? String(name).trim() : 'there'
 
   const html = `
@@ -35,7 +35,7 @@ export async function sendWelcomeEmail({ to, name }) {
       <p>Best regards,<br/><strong>Alnafi</strong><br/>CEO, ${appName}</p>
     </div>
   `
-  const text = `Hi ${creatorName},\n\nI'm Alnafi, CEO of Gadgets BD.\n\nWelcome to our platform, and thanks for registering with us. We're excited to have you on board. Gadgets BD is built to connect great products with the right people, and your journey with us starts here.\n\nYou can now explore products, manage your account, and take full advantage of everything our platform offers. If you're a shop owner, this is your space to grow your shop and reach more customers. If you're here as a buyer, we hope you find exactly what you're looking for.\n\nIf you ever need help or have questions, our team is always ready to support you.\n\nWishing you a great experience with Gadgets BD.\n\nBest regards,\nAlnafi\nCEO, Gadgets BD`
+  const text = `Hi ${creatorName},\n\nI'm Alnafi, CEO of Gadget Hub.\n\nWelcome to our platform, and thanks for registering with us. We're excited to have you on board. Gadget Hub is built to connect great products with the right people, and your journey with us starts here.\n\nYou can now explore products, manage your account, and take full advantage of everything our platform offers. If you're a shop owner, this is your space to grow your shop and reach more customers. If you're here as a buyer, we hope you find exactly what you're looking for.\n\nIf you ever need help or have questions, our team is always ready to support you.\n\nWishing you a great experience with Gadget Hub.\n\nBest regards,\nAlnafi\nCEO, Gadget Hub`
 
   const transport = getTransport()
   await transport.sendMail({
@@ -49,8 +49,8 @@ export async function sendWelcomeEmail({ to, name }) {
 
 export async function sendPasswordResetEmail({ to, resetLink }) {
   const baseUrl = process.env.NEXTAUTH_URL || process.env.APP_URL || 'http://localhost:3000'
-  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@gadgetsbd.com'
-  const appName = 'Gadgets BD'
+  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@GadgetHub.com'
+  const appName = 'Gadget Hub'
 
   const html = `
     <p>You requested a password reset for your ${appName} account.</p>
@@ -71,8 +71,8 @@ export async function sendPasswordResetEmail({ to, resetLink }) {
 }
 
 export async function sendInvoiceEmail({ to, orderId, orderNumber, address, items, itemsSubtotal, deliveryFee, serviceFee, orderTotal, customerName, date }) {
-  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@gadgetsbd.com'
-  const appName = 'Gadgets BD'
+  const from = process.env.SMTP_FROM || process.env.GMAIL_USER || 'noreply@GadgetHub.com'
+  const appName = 'Gadget Hub'
 
   const rows = (items || []).map(
     (i) =>

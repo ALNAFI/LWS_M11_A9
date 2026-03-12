@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { paymentMethodData } from '@/app/data'
 
-const PAYMENT_METHOD_STORAGE_KEY = 'gadgetsbd_payment_method'
+const PAYMENT_METHOD_STORAGE_KEY = 'GadgetHub_payment_method'
 
 export default function PaymentMethod({ checkoutItems = [], orderError, onPlaceOrder }) {
   const [card, setCard] = useState({

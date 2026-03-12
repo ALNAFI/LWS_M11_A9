@@ -129,7 +129,7 @@ export const buyBoxData = {
     quantityOptions: [1, 2, 3, 4, 5],
     sellerInfo: {
       secureText: 'Secure transaction',
-      shippedBy: 'Ships from Gadgets BD',
+      shippedBy: 'Ships from Gadget Hub',
       soldBy: 'Sold by Official Apple Store',
     },
   }

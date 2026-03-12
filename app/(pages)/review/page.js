@@ -23,7 +23,7 @@ export default function ReviewPage() {
       </main>
 
       <Footer
-        copyrightText="1996-{{year}}, GadgetsBD.com, Inc. or its affiliates"
+        copyrightText="1996-{{year}}, GadgetHub.com, Inc. or its affiliates"
         className="w-full border-t border-gray-200 mt-auto py-8"
       />
     </>

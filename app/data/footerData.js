@@ -2,7 +2,7 @@ export const footerData = [
   {
     title: 'Get to Know Us',
     links: [
-      { label: 'About Gadgets BD', href: '/about' },
+      { label: 'About Gadget Hub', href: '/about' },
       { label: 'Careers', href: '#' },
       { label: 'Our Top Brands', href: '/shops' },
     ],
@@ -10,15 +10,15 @@ export const footerData = [
   {
     title: 'Make Money with Us',
     links: [
-      { label: 'Sell on Gadgets BD', href: '/auth/register' },
-      { label: 'Supply to Gadgets BD', href: '/create' },
+      { label: 'Sell on Gadget Hub', href: '/auth/register' },
+      { label: 'Supply to Gadget Hub', href: '/create' },
       { label: 'Become an Affiliate', href: '/manageList' },
     ],
   },
   {
     title: 'Payment Products',
     links: [
-      { label: 'Gadgets BD Business Card', href: '#' },
+      { label: 'Gadget Hub Business Card', href: '#' },
       { label: 'Shop with Points', href: '#' },
       { label: 'Reload Your Balance', href: '#' },
     ],
@@ -37,8 +37,8 @@ export const footerData = [
 ]
 
 export const footerBrand = {
-  name: 'gadgets',
-  suffix: 'BD',
+  name: 'Gadgets ',
+  suffix: 'Hub',
 }
 
-export const footerCopyrightText = 'Gadgets BD - Premium Tech Marketplace. All rights reserved by LWS.'
+export const footerCopyrightText = 'Gadget Hub - Premium Tech Marketplace. All rights reserved by LWS.'

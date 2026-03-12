@@ -90,7 +90,7 @@ export default function Search() {
         type="text"
         value={keyword}
         onChange={handleInputChange}
-        placeholder="Search Gadgets, Laptops, Phones..."
+        placeholder="Search Gadgets , Laptops, Phones..."
         className="flex-1 px-3 text-black outline-none"
       />
       <button type="submit" className="bg-amazon-secondary hover:bg-[#fa8900] px-4 flex items-center justify-center">

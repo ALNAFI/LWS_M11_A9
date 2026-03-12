@@ -14,7 +14,7 @@ export default function WhyUsSection() {
     <div className="bg-white py-12 mt-8">
       <div className="max-w-[1500px] mx-auto px-4">
         <h2 className="text-2xl font-bold text-center mb-8">
-          Why Shop with Gadgets BD?
+          Why Shop with Gadget Hub?
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

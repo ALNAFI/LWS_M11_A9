@@ -138,6 +138,6 @@ export const manageListPageData = {
     pages: [1],
   },
   footer: {
-    copyrightText: 'Gadgets BD Seller Central. All rights reserved by LWS.',
+    copyrightText: 'Gadget Hub Seller Central. All rights reserved by LWS.',
   },
 }

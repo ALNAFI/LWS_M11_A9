@@ -2,7 +2,7 @@ export const forgetPasswordData = {
   form: {
     title: 'Password assistance',
     description:
-      'Enter the email address or mobile phone number associated with your Gadgets BD account.',
+      'Enter the email address or mobile phone number associated with your Gadget Hub account.',
     fields: [
       {
         id: 'email',
@@ -21,7 +21,7 @@ export const forgetPasswordData = {
   },
   helpSection: {
     title: 'Has your email or mobile number changed?',
-    text: "If you no longer use the e-mail address associated with your Gadgets BD account, you may contact",
+    text: "If you no longer use the e-mail address associated with your Gadget Hub account, you may contact",
     link: {
       label: 'Customer Service',
       href: '#',

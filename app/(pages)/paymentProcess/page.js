@@ -11,8 +11,8 @@ import AddressSummary from '@/app/components/paymentProcess/AddressSummary'
 import EditOrderModal from '@/app/components/paymentProcess/EditOrderModal'
 import { useCart } from '@/app/context/CartContext'
 
-const CHECKOUT_STORAGE_KEY = 'gadgetsbd_checkout_items'
-const CHECKOUT_ADDRESS_KEY = 'gadgetsbd_checkout_address'
+const CHECKOUT_STORAGE_KEY = 'GadgetHub_checkout_items'
+const CHECKOUT_ADDRESS_KEY = 'GadgetHub_checkout_address'
 export default function PaymentProcessPage() {
   const router = useRouter()
   const { setItems } = useCart()

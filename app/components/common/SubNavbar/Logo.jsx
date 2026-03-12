@@ -7,7 +7,7 @@ export default function Logo() {
             className="flex items-center hover:outline hover:outline-1 hover:outline-white rounded-sm p-1"
         >
             <span className="text-2xl font-bold tracking-tighter">
-                gadgets<span className="italic text-amazon-secondary">BD</span>
+                Gadgets <span className="italic text-amazon-secondary">Hub</span>
             </span>
         </Link>
     )

@@ -16,7 +16,7 @@ export default function ShopInfoTab({ shop }) {
 
   const policies = [
     'Secure payment options',
-    'Ships from Gadgets BD',
+    'Ships from Gadget Hub',
   ]
   if (shop.description) policies.unshift(shop.description)
 

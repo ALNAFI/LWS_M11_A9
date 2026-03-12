@@ -63,11 +63,11 @@ export async function generateInvoicePdfBuffer(options) {
     doc.on('error', reject)
 
     const addr = address
-    doc.fontSize(20).font('Helvetica-Bold').text('Gadgets BD', 50, 50)
+    doc.fontSize(20).font('Helvetica-Bold').text('Gadget Hub', 50, 50)
     doc.fontSize(9).font('Helvetica')
     doc.text('Premium Tech Marketplace', 50, 72)
     doc.text('Dhaka, Bangladesh', 50, 84)
-    doc.text('support@gadgetsbd.com', 50, 96)
+    doc.text('support@GadgetHub.com', 50, 96)
     doc.moveDown(2)
 
     doc.fontSize(14).font('Helvetica-Bold').text('INVOICE', 50, 130)

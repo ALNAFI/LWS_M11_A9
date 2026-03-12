@@ -9,7 +9,7 @@ export const profilePageData = {
   },
   pageIntro: {
     title: 'Shop Profile',
-    subtitle: 'Manage your shop information and appearance on Gadgets BD',
+    subtitle: 'Manage your shop information and appearance on Gadget Hub',
     modeButtons: [
       { id: 'view', label: 'View Mode', icon: 'Eye' },
       { id: 'edit', label: 'Edit Mode', icon: 'Pencil' },
@@ -30,7 +30,7 @@ export const profilePageData = {
   infoFields: [
     { label: 'Shop Name', value: 'Tech Hub BD' },
     { label: 'Owner Name', value: 'Kamal Hossain' },
-    { label: 'Email', value: 'techhub@gadgetsbd.com' },
+    { label: 'Email', value: 'techhub@GadgetHub.com' },
     { label: 'Phone Number', value: '+880 1712-345678' },
     { label: 'Location', value: 'Dhaka, Bangladesh' },
     { label: 'Specialization', value: 'Laptops & PCs' },
@@ -52,7 +52,7 @@ export const profilePageData = {
         {
           gridCols: 2,
           fields: [
-            { name: 'email', label: 'Email *', type: 'email', defaultValue: 'techhub@gadgetsbd.com' },
+            { name: 'email', label: 'Email *', type: 'email', defaultValue: 'techhub@GadgetHub.com' },
             { name: 'phone', label: 'Phone Number *', type: 'tel', defaultValue: '+880 1712-345678' },
           ],
         },
@@ -117,6 +117,6 @@ export const profilePageData = {
     { type: 'submit', label: 'Save Changes', variant: 'primary' },
   ],
   footer: {
-    copyrightText: 'Gadgets BD Seller Central. All rights reserved by LWS.',
+    copyrightText: 'Gadget Hub Seller Central. All rights reserved by LWS.',
   },
 }

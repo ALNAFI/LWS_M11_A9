@@ -1,4 +1,4 @@
-# Gadgets BD
+# Gadget Hub
 
 A full-stack e-commerce marketplace for buying and selling premium tech products. Built with Next.js 14 (App Router), MongoDB, and NextAuth. Supports customer shopping, shop-owner seller central, orders, reviews, and invoice emails with PDF attachment.
 

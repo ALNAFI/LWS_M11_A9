@@ -24,7 +24,7 @@ export const loginData = {
     submitLabel: 'Sign in',
   },
   disclaimer: {
-    text: "By continuing, you agree to Gadgets BD's",
+    text: "By continuing, you agree to Gadget Hub's",
     links: [
       { label: 'Conditions of Use', href: '#' },
       { label: 'Privacy Notice', href: '#' },
@@ -38,10 +38,10 @@ export const loginData = {
     icon: 'ChevronRight',
   },
   divider: {
-    text: 'New to Gadgets BD?',
+    text: 'New to Gadget Hub?',
   },
   createAccount: {
-    label: 'Create your Gadgets BD account',
+    label: 'Create your Gadget Hub account',
     href: '/auth/register',
   },
 }
