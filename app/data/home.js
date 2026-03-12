@@ -168,14 +168,15 @@ export const categoriesData = [
     },
   ]
   
+// Brand logos live under /public/Images/*.png (note capital \"I\")
 export const brandData = [
-  { name: 'Apple', logo: '/images/apple.png' },
-  { name: 'Samsung', logo: '/images/samsung.png' },
-  { name: 'Dell', logo: '/images/dell.png' },
-  { name: 'HP', logo: '/images/hp.png' },
-  { name: 'Lenovo', logo: '/images/lenovo.png' },
-  { name: 'Sony', logo: '/images/sony.png' },
-  { name: 'Razer', logo: '/images/razer.png' },
-  { name: 'Logitech', logo: '/images/logitech.png' },
+  { name: 'Apple', logo: '/Images/apple.png' },
+  { name: 'Samsung', logo: '/Images/samsung.png' },
+  { name: 'Dell', logo: '/Images/dell.png' },
+  { name: 'HP', logo: '/Images/hp.png' },
+  { name: 'Lenovo', logo: '/Images/lenovo.png' },
+  { name: 'Sony', logo: '/Images/sony.png' },
+  { name: 'Razer', logo: '/Images/razer.png' },
+  { name: 'Logitech', logo: '/Images/logitech.png' },
 ]
   
